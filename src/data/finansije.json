@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "datum": "2025-01-15",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Projekt Beograd",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 2,
+    "datum": "2025-01-14",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva - 3 kamiona",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 3,
+    "datum": "2025-01-13",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Dovoz peska - Gradilište Novi Sad",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 4,
+    "datum": "2025-01-12",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8500,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 5,
+    "datum": "2025-01-11",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 52000,
+    "opis": "Odvoz kamena - Auto-put E75",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 6,
+    "datum": "2025-01-10",
+    "tip": "rashod",
+    "kategorija": "Osiguranje",
+    "iznos": 15000,
+    "opis": "Godišnje osiguranje vozila",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 7,
+    "datum": "2025-01-09",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Prevoz agregata - Kragujevac",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 8,
+    "datum": "2025-01-08",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11200,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 9,
+    "datum": "2025-01-07",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 47500,
+    "opis": "Odvoz šljunka i peska - Mix",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 10,
+    "datum": "2025-01-06",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 6800,
+    "opis": "Zamena ulja i filtera",
+    "vozilo": "MAN TGX"
+  }
+]

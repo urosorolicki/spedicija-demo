@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "naziv": "Volvo FH16",
+    "registracija": "BG-123-AB",
+    "tip": "Kiper kamion",
+    "nosivost": 18,
+    "godiste": 2020,
+    "status": "aktivan",
+    "kilometraza": 125000,
+    "sledecaRegistracija": "2025-06-15",
+    "sledecaRevizijaGorivo": "2025-03-20"
+  },
+  {
+    "id": 2,
+    "naziv": "Scania R450",
+    "registracija": "BG-456-CD",
+    "tip": "Kiper kamion",
+    "nosivost": 20,
+    "godiste": 2019,
+    "status": "aktivan",
+    "kilometraza": 145000,
+    "sledecaRegistracija": "2025-08-22",
+    "sledecaRevizijaGorivo": "2025-02-15"
+  },
+  {
+    "id": 3,
+    "naziv": "Mercedes Actros",
+    "registracija": "BG-789-EF",
+    "tip": "Kiper kamion",
+    "nosivost": 19,
+    "godiste": 2021,
+    "status": "aktivan",
+    "kilometraza": 98000,
+    "sledecaRegistracija": "2025-11-10",
+    "sledecaRevizijaGorivo": "2025-04-05"
+  },
+  {
+    "id": 4,
+    "naziv": "MAN TGX",
+    "registracija": "BG-321-GH",
+    "tip": "Kiper kamion",
+    "nosivost": 17,
+    "godiste": 2018,
+    "status": "u servisu",
+    "kilometraza": 178000,
+    "sledecaRegistracija": "2025-05-18",
+    "sledecaRevizijaGorivo": "2025-02-28"
+  },
+  {
+    "id": 5,
+    "naziv": "Iveco Stralis",
+    "registracija": "BG-654-IJ",
+    "tip": "Šleper",
+    "nosivost": 24,
+    "godiste": 2017,
+    "status": "aktivan",
+    "kilometraza": 201000,
+    "sledecaRegistracija": "2025-07-30",
+    "sledecaRevizijaGorivo": "2025-03-12"
+  }
+]

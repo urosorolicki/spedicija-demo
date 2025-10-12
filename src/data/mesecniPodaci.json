@@ -1,0 +1,37 @@
+[
+  {
+    "mesec": "Jul",
+    "prihodi": 320000,
+    "rashodi": 145000
+  },
+  {
+    "mesec": "Avg",
+    "prihodi": 285000,
+    "rashodi": 132000
+  },
+  {
+    "mesec": "Sep",
+    "prihodi": 340000,
+    "rashodi": 158000
+  },
+  {
+    "mesec": "Okt",
+    "prihodi": 395000,
+    "rashodi": 167000
+  },
+  {
+    "mesec": "Nov",
+    "prihodi": 375000,
+    "rashodi": 152000
+  },
+  {
+    "mesec": "Dec",
+    "prihodi": 410000,
+    "rashodi": 178000
+  },
+  {
+    "mesec": "Jan",
+    "prihodi": 435000,
+    "rashodi": 185000
+  }
+]

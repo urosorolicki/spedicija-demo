@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "datum": "2025-01-15",
+    "tip": "Šljunak",
+    "kolicina": 85,
+    "jedinica": "m³",
+    "lokacija": "Beograd - Novi Beograd",
+    "vozac": "Marko Petrović",
+    "vozilo": "Volvo FH16",
+    "smer": "odvoz"
+  },
+  {
+    "id": 2,
+    "datum": "2025-01-14",
+    "tip": "Pesak",
+    "kolicina": 72,
+    "jedinica": "m³",
+    "lokacija": "Novi Sad - Ribnjak",
+    "vozac": "Jovan Ilić",
+    "vozilo": "Scania R450",
+    "smer": "dovoz"
+  },
+  {
+    "id": 3,
+    "datum": "2025-01-13",
+    "tip": "Kamen",
+    "kolicina": 95,
+    "jedinica": "m³",
+    "lokacija": "Kragujevac - Industrijska zona",
+    "vozac": "Stefan Nikolić",
+    "vozilo": "Mercedes Actros",
+    "smer": "odvoz"
+  },
+  {
+    "id": 4,
+    "datum": "2025-01-12",
+    "tip": "Agregat",
+    "kolicina": 68,
+    "jedinica": "m³",
+    "lokacija": "Niš - Centar",
+    "vozac": "Nemanja Đorđević",
+    "vozilo": "MAN TGX",
+    "smer": "dovoz"
+  },
+  {
+    "id": 5,
+    "datum": "2025-01-11",
+    "tip": "Šljunak",
+    "kolicina": 80,
+    "jedinica": "m³",
+    "lokacija": "Subotica - Auto-put",
+    "vozac": "Marko Petrović",
+    "vozilo": "Volvo FH16",
+    "smer": "odvoz"
+  },
+  {
+    "id": 6,
+    "datum": "2025-01-10",
+    "tip": "Pesak",
+    "kolicina": 78,
+    "jedinica": "m³",
+    "lokacija": "Pančevo - Luka",
+    "vozac": "Jovan Ilić",
+    "vozilo": "Scania R450",
+    "smer": "dovoz"
+  },
+  {
+    "id": 7,
+    "datum": "2025-01-09",
+    "tip": "Kamen",
+    "kolicina": 88,
+    "jedinica": "m³",
+    "lokacija": "Kraljevo - Kamenolom",
+    "vozac": "Stefan Nikolić",
+    "vozilo": "Mercedes Actros",
+    "smer": "odvoz"
+  },
+  {
+    "id": 8,
+    "datum": "2025-01-08",
+    "tip": "Agregat",
+    "kolicina": 65,
+    "jedinica": "m³",
+    "lokacija": "Čačak - Gradilište",
+    "vozac": "Nemanja Đorđević",
+    "vozilo": "Iveco Stralis",
+    "smer": "dovoz"
+  },
+  {
+    "id": 9,
+    "datum": "2025-01-07",
+    "tip": "Šljunak",
+    "kolicina": 90,
+    "jedinica": "m³",
+    "lokacija": "Smederevo - Industrijska zona",
+    "vozac": "Marko Petrović",
+    "vozilo": "Volvo FH16",
+    "smer": "odvoz"
+  },
+  {
+    "id": 10,
+    "datum": "2025-01-06",
+    "tip": "Pesak",
+    "kolicina": 75,
+    "jedinica": "m³",
+    "lokacija": "Vršac - Deponija",
+    "vozac": "Jovan Ilić",
+    "vozilo": "Scania R450",
+    "smer": "dovoz"
+  }
+]
