@@ -3,14 +3,17 @@ import { Badge } from "@/components/ui/badge";
 import vozilaData from "@/data/vozila.json";
 import { Truck, Calendar, Gauge, Settings } from "lucide-react";
 import { motion } from "framer-motion";
+import { VehicleProfitability } from "@/components/VehicleProfitability";
 
 export default function Vozila() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div>
         <h1 className="text-3xl font-bold text-foreground mb-2">Vozila</h1>
-        <p className="text-muted-foreground">Pregled voznog parka</p>
+        <p className="text-muted-foreground">Pregled voznog parka i analize profitabilnosti</p>
       </div>
+
+      <VehicleProfitability />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {vozilaData.map((vozilo, index) => (
