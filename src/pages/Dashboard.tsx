@@ -99,17 +99,27 @@ export default function Dashboard() {
               Mesečni prihodi i rashodi
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-4 md:p-6">
+            <ResponsiveContainer width="100%" height={250} className="mt-2">
               <LineChart data={mesecniData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="mesec" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <XAxis 
+                  dataKey="mesec" 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tick={{ fontSize: '10px' }}
+                />
+                <YAxis 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tick={{ fontSize: '10px' }}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "hsl(var(--card))",
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
+                    fontSize: '12px'
                   }}
                 />
                 <Legend />
@@ -166,45 +176,52 @@ export default function Dashboard() {
           <CardTitle>Poslednje transakcije</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Datum</TableHead>
-                <TableHead>Tip</TableHead>
-                <TableHead>Kategorija</TableHead>
-                <TableHead>Opis</TableHead>
-                <TableHead>Vozilo</TableHead>
-                <TableHead className="text-right">Iznos</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {poslednjeTransakcije.map((transakcija) => (
-                <TableRow key={transakcija.id}>
-                  <TableCell className="font-medium">
-                    {new Date(transakcija.datum).toLocaleDateString("sr-RS")}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={transakcija.tip === "prihod" ? "default" : "destructive"}
-                    >
-                      {transakcija.tip}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{transakcija.kategorija}</TableCell>
-                  <TableCell className="max-w-xs truncate">{transakcija.opis}</TableCell>
-                  <TableCell>{transakcija.vozilo}</TableCell>
-                  <TableCell
-                    className={`text-right font-semibold ${
-                      transakcija.tip === "prihod" ? "text-success" : "text-destructive"
-                    }`}
-                  >
-                    {transakcija.tip === "prihod" ? "+" : "-"}
-                    {transakcija.iznos.toLocaleString("sr-RS")} RSD
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <div className="overflow-x-auto -mx-4 md:mx-0">
+            <div className="min-w-full inline-block align-middle">
+              <div className="overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="whitespace-nowrap">Datum</TableHead>
+                      <TableHead className="whitespace-nowrap">Tip</TableHead>
+                      <TableHead className="hidden md:table-cell">Kategorija</TableHead>
+                      <TableHead className="hidden md:table-cell">Opis</TableHead>
+                      <TableHead className="hidden md:table-cell">Vozilo</TableHead>
+                      <TableHead className="text-right whitespace-nowrap">Iznos</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {poslednjeTransakcije.map((transakcija) => (
+                      <TableRow key={transakcija.id}>
+                        <TableCell className="font-medium whitespace-nowrap">
+                          {new Date(transakcija.datum).toLocaleDateString("sr-RS")}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={transakcija.tip === "prihod" ? "default" : "destructive"}
+                            className="whitespace-nowrap"
+                          >
+                            {transakcija.tip}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">{transakcija.kategorija}</TableCell>
+                        <TableCell className="hidden md:table-cell max-w-xs truncate">{transakcija.opis}</TableCell>
+                        <TableCell className="hidden md:table-cell">{transakcija.vozilo}</TableCell>
+                        <TableCell
+                          className={`text-right font-semibold whitespace-nowrap ${
+                            transakcija.tip === "prihod" ? "text-success" : "text-destructive"
+                          }`}
+                        >
+                          {transakcija.tip === "prihod" ? "+" : "-"}
+                          {transakcija.iznos.toLocaleString("sr-RS")} RSD
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
