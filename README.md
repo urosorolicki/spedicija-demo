@@ -61,8 +61,3 @@ Korisnici se dodaju kroz deo aplikacije za autentifikaciju.
 
 ---
 
-## 4. Kontakt i podrška
-
-Za sva pitanja ili probleme, kontaktirajte administratora ili pošaljite email na: info@markovickop.com
-
----
