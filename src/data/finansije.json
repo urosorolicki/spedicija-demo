@@ -88,5 +88,1481 @@
     "iznos": 6800,
     "opis": "Zamena ulja i filtera",
     "vozilo": "MAN TGX"
+  },
+  {
+    "id": 11,
+    "datum": "2025-01-05",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Prevoz cementa - Beograd",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 12,
+    "datum": "2025-01-04",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 13,
+    "datum": "2025-01-03",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 36000,
+    "opis": "Odvoz zemlje - Zemun",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 14,
+    "datum": "2025-01-02",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 12000,
+    "opis": "Servis motora",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 15,
+    "datum": "2025-01-01",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 48000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 16,
+    "datum": "2024-12-31",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 13500,
+    "opis": "Dopuna goriva - kraj godine",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 17,
+    "datum": "2024-12-30",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 39000,
+    "opis": "Odvoz kamena - Kragujevac",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 18,
+    "datum": "2024-12-29",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 7500,
+    "opis": "Zamena filtera",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 19,
+    "datum": "2024-12-28",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 44000,
+    "opis": "Prevoz peska - Zemun",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 20,
+    "datum": "2024-12-27",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11000,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 21,
+    "datum": "2024-12-26",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 51000,
+    "opis": "Odvoz šljunka - Beograd",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 22,
+    "datum": "2024-12-25",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 9200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 23,
+    "datum": "2024-12-24",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 37000,
+    "opis": "Prevoz cementa - Novi Sad",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 24,
+    "datum": "2024-12-23",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 25,
+    "datum": "2024-12-22",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 46000,
+    "opis": "Odvoz zemlje - Kragujevac",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 26,
+    "datum": "2024-12-21",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 6800,
+    "opis": "Zamena ulja",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 27,
+    "datum": "2024-12-20",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Prevoz šljunka - Zemun",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 28,
+    "datum": "2024-12-19",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 29,
+    "datum": "2024-12-18",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Odvoz kamena - Beograd",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 30,
+    "datum": "2024-12-17",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11500,
+    "opis": "Servis motora",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 31,
+    "datum": "2024-12-16",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 49000,
+    "opis": "Prevoz peska - Novi Sad",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 32,
+    "datum": "2024-12-15",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 13200,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 33,
+    "datum": "2024-12-14",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 34,
+    "datum": "2024-12-13",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8500,
+    "opis": "Zamena filtera",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 35,
+    "datum": "2024-12-12",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Prevoz cementa - Zemun",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 36,
+    "datum": "2024-12-11",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 37,
+    "datum": "2024-12-10",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 36000,
+    "opis": "Odvoz zemlje - Beograd",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 38,
+    "datum": "2024-12-09",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 7200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 39,
+    "datum": "2024-12-08",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 47000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 40,
+    "datum": "2024-12-07",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10900,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 41,
+    "datum": "2024-12-06",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 39000,
+    "opis": "Odvoz kamena - Kragujevac",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 42,
+    "datum": "2024-12-05",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 9800,
+    "opis": "Zamena ulja i filtera",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 43,
+    "datum": "2024-12-04",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 43000,
+    "opis": "Prevoz peska - Zemun",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 44,
+    "datum": "2024-12-03",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12700,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 45,
+    "datum": "2024-12-02",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Odvoz šljunka - Beograd",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 46,
+    "datum": "2024-12-01",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Servis motora",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 47,
+    "datum": "2024-11-30",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 48000,
+    "opis": "Prevoz cementa - Novi Sad",
+    "vozilo": "MAN TGX"
+  },
+  {
+    "id": 48,
+    "datum": "2024-11-29",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 13100,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 49,
+    "datum": "2024-11-28",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz zemlje - Kragujevac",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 50,
+    "datum": "2024-11-27",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena filtera",
+    "vozilo": "Scania R450"
+  },
+  {
+    "id": 51,
+    "datum": "2024-12-20",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Odvoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 52,
+    "datum": "2024-12-19",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 53,
+    "datum": "2024-12-18",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 54,
+    "datum": "2024-12-17",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 55,
+    "datum": "2024-12-16",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 56,
+    "datum": "2024-12-15",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Niš",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 57,
+    "datum": "2024-12-14",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 58,
+    "datum": "2024-12-13",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 59,
+    "datum": "2024-12-12",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena ulja",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 60,
+    "datum": "2024-12-11",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 61,
+    "datum": "2024-12-10",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 62,
+    "datum": "2024-12-09",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 63,
+    "datum": "2024-12-08",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 64,
+    "datum": "2024-12-07",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 65,
+    "datum": "2024-12-06",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 66,
+    "datum": "2024-12-05",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 67,
+    "datum": "2024-12-04",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 68,
+    "datum": "2024-12-03",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 69,
+    "datum": "2024-12-02",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 70,
+    "datum": "2024-12-01",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 71,
+    "datum": "2024-11-30",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Odvoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 72,
+    "datum": "2024-11-29",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 73,
+    "datum": "2024-11-28",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 74,
+    "datum": "2024-11-27",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 75,
+    "datum": "2024-11-26",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 76,
+    "datum": "2024-11-25",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Niš",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 77,
+    "datum": "2024-11-24",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 78,
+    "datum": "2024-11-23",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 79,
+    "datum": "2024-11-22",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena ulja",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 80,
+    "datum": "2024-11-21",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 81,
+    "datum": "2024-11-20",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 82,
+    "datum": "2024-11-19",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 83,
+    "datum": "2024-11-18",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 84,
+    "datum": "2024-11-17",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 85,
+    "datum": "2024-11-16",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 86,
+    "datum": "2024-11-15",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 87,
+    "datum": "2024-11-14",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 88,
+    "datum": "2024-11-13",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 89,
+    "datum": "2024-11-12",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 90,
+    "datum": "2024-11-11",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 91,
+    "datum": "2024-11-10",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 92,
+    "datum": "2024-11-09",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 93,
+    "datum": "2024-11-08",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 94,
+    "datum": "2024-11-07",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 95,
+    "datum": "2024-11-06",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 96,
+    "datum": "2024-11-05",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 97,
+    "datum": "2024-11-04",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 98,
+    "datum": "2024-11-03",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 99,
+    "datum": "2024-11-02",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 100,
+    "datum": "2024-11-01",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 101,
+    "datum": "2024-10-31",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Odvoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 102,
+    "datum": "2024-10-30",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 103,
+    "datum": "2024-10-29",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 104,
+    "datum": "2024-10-28",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 105,
+    "datum": "2024-10-27",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 106,
+    "datum": "2024-10-26",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Niš",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 107,
+    "datum": "2024-10-25",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 108,
+    "datum": "2024-10-24",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 109,
+    "datum": "2024-10-23",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena ulja",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 110,
+    "datum": "2024-10-22",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 111,
+    "datum": "2024-10-21",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 112,
+    "datum": "2024-10-20",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 113,
+    "datum": "2024-10-19",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 114,
+    "datum": "2024-10-18",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 115,
+    "datum": "2024-10-17",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 116,
+    "datum": "2024-10-16",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 117,
+    "datum": "2024-10-15",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 118,
+    "datum": "2024-10-14",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 119,
+    "datum": "2024-10-13",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 120,
+    "datum": "2024-10-12",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 121,
+    "datum": "2024-10-11",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 122,
+    "datum": "2024-10-10",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 123,
+    "datum": "2024-10-09",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 124,
+    "datum": "2024-10-08",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 125,
+    "datum": "2024-10-07",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 126,
+    "datum": "2024-10-06",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 127,
+    "datum": "2024-10-05",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 128,
+    "datum": "2024-10-04",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 129,
+    "datum": "2024-10-03",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 130,
+    "datum": "2024-10-02",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 131,
+    "datum": "2024-10-01",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 132,
+    "datum": "2025-10-13",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Beograd",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 133,
+    "datum": "2025-10-12",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz betona - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 134,
+    "datum": "2025-10-11",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 135,
+    "datum": "2025-10-10",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz zemlje - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 136,
+    "datum": "2025-10-09",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 137,
+    "datum": "2025-10-08",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Niš",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 138,
+    "datum": "2025-10-07",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 139,
+    "datum": "2025-10-06",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 140,
+    "datum": "2025-10-05",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena ulja",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 141,
+    "datum": "2025-10-04",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 142,
+    "datum": "2025-10-03",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 11800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 143,
+    "datum": "2025-10-02",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 144,
+    "datum": "2025-10-01",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 145,
+    "datum": "2025-09-30",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 146,
+    "datum": "2025-09-29",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 147,
+    "datum": "2025-09-28",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 148,
+    "datum": "2025-09-27",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 149,
+    "datum": "2025-09-26",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 150,
+    "datum": "2025-09-25",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 151,
+    "datum": "2025-09-24",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 152,
+    "datum": "2025-09-23",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 153,
+    "datum": "2025-09-22",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 154,
+    "datum": "2025-09-21",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 155,
+    "datum": "2025-09-20",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 156,
+    "datum": "2025-09-19",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Servis kočnica",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 157,
+    "datum": "2025-09-18",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 158,
+    "datum": "2025-09-17",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 159,
+    "datum": "2025-09-16",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 160,
+    "datum": "2025-09-15",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Zamena filtera",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 161,
+    "datum": "2025-09-14",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 162,
+    "datum": "2025-09-13",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 163,
+    "datum": "2025-09-12",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 42000,
+    "opis": "Odvoz betona - Beograd",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 164,
+    "datum": "2025-09-11",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 8900,
+    "opis": "Zamena ulja",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 165,
+    "datum": "2025-09-10",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 38000,
+    "opis": "Prevoz zemlje - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 166,
+    "datum": "2025-09-09",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 12500,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 167,
+    "datum": "2025-09-08",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 45000,
+    "opis": "Odvoz šljunka - Kragujevac",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 168,
+    "datum": "2025-09-07",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 11200,
+    "opis": "Servis kočnica",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 169,
+    "datum": "2025-09-06",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 32000,
+    "opis": "Prevoz betona - Beograd",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 170,
+    "datum": "2025-09-05",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 10800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
+  },
+  {
+    "id": 171,
+    "datum": "2025-09-04",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 41000,
+    "opis": "Odvoz zemlje - Niš",
+    "vozilo": "Scania R500"
+  },
+  {
+    "id": 172,
+    "datum": "2025-09-03",
+    "tip": "rashod",
+    "kategorija": "Održavanje",
+    "iznos": 15200,
+    "opis": "Zamena filtera",
+    "vozilo": "Mercedes Actros"
+  },
+  {
+    "id": 173,
+    "datum": "2025-09-02",
+    "tip": "prihod",
+    "kategorija": "Prevoz",
+    "iznos": 35000,
+    "opis": "Prevoz šljunka - Novi Sad",
+    "vozilo": "Volvo FH16"
+  },
+  {
+    "id": 174,
+    "datum": "2025-09-01",
+    "tip": "rashod",
+    "kategorija": "Gorivo",
+    "iznos": 9800,
+    "opis": "Dopuna goriva",
+    "vozilo": "Svi"
   }
 ]

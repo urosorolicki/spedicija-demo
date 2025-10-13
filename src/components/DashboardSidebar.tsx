@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 interface SidebarProps {
   isOpen: boolean;
   isMobile: boolean;
+  onClose?: () => void;
 }
 
 const menuItems = [
@@ -16,7 +17,7 @@ const menuItems = [
   { icon: Settings, label: "Podešavanja", path: "/podesavanja" },
 ];
 
-export const DashboardSidebar = ({ isOpen, isMobile }: SidebarProps) => {
+export const DashboardSidebar = ({ isOpen, isMobile, onClose }: SidebarProps) => {
   return (
     <motion.aside
       initial={false}
@@ -35,7 +36,11 @@ export const DashboardSidebar = ({ isOpen, isMobile }: SidebarProps) => {
           <NavLink
             key={item.path}
             to={item.path}
-            onClick={() => isMobile && !isOpen}
+            onClick={() => {
+              if (isMobile && onClose) {
+                onClose();
+              }
+            }}
             className={({ isActive }) =>
               cn(
                 "flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-smooth",

@@ -57,13 +57,13 @@ export default function Dashboard() {
   const poslednjeTransakcije = finansijeData.slice(0, 10);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">Pregled ključnih metrika i aktivnosti</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Pregled ključnih metrika i aktivnosti</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           title="Ukupni prihodi"
           value={`${ukupniPrihodi.toLocaleString("sr-RS")} RSD`}
@@ -94,25 +94,25 @@ export default function Dashboard() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <TrendingDown className="h-5 w-5 text-primary" />
               Mesečni prihodi i rashodi
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 md:p-6">
-            <ResponsiveContainer width="100%" height={250} className="mt-2">
+          <CardContent className="p-3 sm:p-4 md:p-6">
+            <ResponsiveContainer width="100%" height={200} className="mt-2">
               <LineChart data={mesecniData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis 
                   dataKey="mesec" 
                   stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tick={{ fontSize: '10px' }}
+                  fontSize={10}
+                  tick={{ fontSize: '8px' }}
                 />
                 <YAxis 
                   stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tick={{ fontSize: '10px' }}
+                  fontSize={10}
+                  tick={{ fontSize: '8px' }}
                 />
                 <Tooltip
                   contentStyle={{
@@ -127,14 +127,14 @@ export default function Dashboard() {
                   type="monotone"
                   dataKey="prihodi"
                   stroke="hsl(var(--primary))"
-                  strokeWidth={3}
+                  strokeWidth={2}
                   name="Prihodi"
                 />
                 <Line
                   type="monotone"
                   dataKey="rashodi"
                   stroke="hsl(var(--destructive))"
-                  strokeWidth={3}
+                  strokeWidth={2}
                   name="Rashodi"
                 />
               </LineChart>
@@ -144,22 +144,32 @@ export default function Dashboard() {
 
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <DollarSign className="h-5 w-5 text-accent" />
               Materijal - Dovoz/Odvoz
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-3 sm:p-4 md:p-6">
+            <ResponsiveContainer width="100%" height={200}>
               <BarChart data={materijalPoTipu}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="tip" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <XAxis 
+                  dataKey="tip" 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={10}
+                  tick={{ fontSize: '8px' }}
+                />
+                <YAxis 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={10}
+                  tick={{ fontSize: '8px' }}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "hsl(var(--card))",
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
+                    fontSize: '12px'
                   }}
                 />
                 <Legend />
@@ -173,54 +183,50 @@ export default function Dashboard() {
 
       <Card className="shadow-card">
         <CardHeader>
-          <CardTitle>Poslednje transakcije</CardTitle>
+          <CardTitle className="text-lg">Poslednje transakcije</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto -mx-4 md:mx-0">
-            <div className="min-w-full inline-block align-middle">
-              <div className="overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="whitespace-nowrap">Datum</TableHead>
-                      <TableHead className="whitespace-nowrap">Tip</TableHead>
-                      <TableHead className="hidden md:table-cell">Kategorija</TableHead>
-                      <TableHead className="hidden md:table-cell">Opis</TableHead>
-                      <TableHead className="hidden md:table-cell">Vozilo</TableHead>
-                      <TableHead className="text-right whitespace-nowrap">Iznos</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {poslednjeTransakcije.map((transakcija) => (
-                      <TableRow key={transakcija.id}>
-                        <TableCell className="font-medium whitespace-nowrap">
-                          {new Date(transakcija.datum).toLocaleDateString("sr-RS")}
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={transakcija.tip === "prihod" ? "default" : "destructive"}
-                            className="whitespace-nowrap"
-                          >
-                            {transakcija.tip}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">{transakcija.kategorija}</TableCell>
-                        <TableCell className="hidden md:table-cell max-w-xs truncate">{transakcija.opis}</TableCell>
-                        <TableCell className="hidden md:table-cell">{transakcija.vozilo}</TableCell>
-                        <TableCell
-                          className={`text-right font-semibold whitespace-nowrap ${
-                            transakcija.tip === "prihod" ? "text-success" : "text-destructive"
-                          }`}
-                        >
-                          {transakcija.tip === "prihod" ? "+" : "-"}
-                          {transakcija.iznos.toLocaleString("sr-RS")} RSD
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+        <CardContent className="p-0 sm:p-6">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="whitespace-nowrap text-xs sm:text-sm">Datum</TableHead>
+                  <TableHead className="whitespace-nowrap text-xs sm:text-sm">Tip</TableHead>
+                  <TableHead className="hidden sm:table-cell text-xs sm:text-sm">Kategorija</TableHead>
+                  <TableHead className="hidden md:table-cell text-xs sm:text-sm">Opis</TableHead>
+                  <TableHead className="hidden md:table-cell text-xs sm:text-sm">Vozilo</TableHead>
+                  <TableHead className="text-right whitespace-nowrap text-xs sm:text-sm">Iznos</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {poslednjeTransakcije.map((transakcija) => (
+                  <TableRow key={transakcija.id}>
+                    <TableCell className="font-medium whitespace-nowrap text-xs sm:text-sm">
+                      {new Date(transakcija.datum).toLocaleDateString("sr-RS")}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={transakcija.tip === "prihod" ? "default" : "destructive"}
+                        className="whitespace-nowrap text-xs"
+                      >
+                        {transakcija.tip}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{transakcija.kategorija}</TableCell>
+                    <TableCell className="hidden md:table-cell max-w-xs truncate text-xs sm:text-sm">{transakcija.opis}</TableCell>
+                    <TableCell className="hidden md:table-cell text-xs sm:text-sm">{transakcija.vozilo}</TableCell>
+                    <TableCell
+                      className={`text-right font-semibold whitespace-nowrap text-xs sm:text-sm ${
+                        transakcija.tip === "prihod" ? "text-success" : "text-destructive"
+                      }`}
+                    >
+                      {transakcija.tip === "prihod" ? "+" : "-"}
+                      {transakcija.iznos.toLocaleString("sr-RS")} RSD
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>
