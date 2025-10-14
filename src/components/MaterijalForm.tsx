@@ -24,7 +24,7 @@ export interface MaterijalData {
 
 const jedinice = ["kg", "t", "l", "m³"];
 const tipovi = ["Šljunak", "Pesak", "Kamen", "Agregat"];
-const smerovi = ["dovoz", "odvoz"];
+const smerovi = ["ulaz", "izlaz"];
 
 export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialData, vozila = [] }) => {
   const [isOpen, setIsOpen] = useState(false);

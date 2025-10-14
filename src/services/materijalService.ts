@@ -4,7 +4,7 @@ import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 export interface Materijal extends Models.Document {
   userId: string;
   datum: string;
-  tip: 'dovoz' | 'odvoz';
+  tip: 'ulaz' | 'izlaz';
   materijal: string;
   tezina: number;
   jedinica: string;

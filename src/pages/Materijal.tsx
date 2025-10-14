@@ -93,7 +93,7 @@ export default function Materijal() {
     
     const result = await createMaterijal(user.id, {
       datum: data.datum,
-      tip: data.smer as 'dovoz' | 'odvoz',
+      tip: data.smer as 'ulaz' | 'izlaz',
       materijal: data.tip,
       tezina: data.kolicina,
       jedinica: data.jedinica,
@@ -118,7 +118,7 @@ export default function Materijal() {
     
     const result = await updateMaterijal(editingMaterijal.$id, {
       datum: data.datum,
-      tip: data.smer as 'dovoz' | 'odvoz',
+      tip: data.smer as 'ulaz' | 'izlaz',
       materijal: data.tip,
       tezina: data.kolicina,
       jedinica: data.jedinica,
@@ -200,12 +200,12 @@ export default function Materijal() {
   }, [materijalData, searchQuery, smerFilter, tipFilter, sortBy]);
 
   // Calculate totals from filtered data
-  const ukupanDovoz = filteredData
-    .filter((m) => m.smer === "dovoz")
+  const ukupanUlaz = filteredData
+    .filter((m) => m.smer === "ulaz")
     .reduce((sum, m) => sum + Number(m.kolicina), 0);
 
-  const ukupanOdvoz = filteredData
-    .filter((m) => m.smer === "odvoz")
+  const ukupanIzlaz = filteredData
+    .filter((m) => m.smer === "izlaz")
     .reduce((sum, m) => sum + Number(m.kolicina), 0);
 
   const handleExport = (format: "json" | "csv" | "pdf") => {
@@ -230,7 +230,7 @@ export default function Materijal() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Evidencija materijala</h1>
-          <p className="text-sm sm:text-base text-muted-foreground">Pregled dovoza i odvoza materijala</p>
+          <p className="text-sm sm:text-base text-muted-foreground">Pregled ulaza i izlaza materijala</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -278,8 +278,8 @@ export default function Materijal() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="svi">Svi</SelectItem>
-                    <SelectItem value="dovoz">Dovoz</SelectItem>
-                    <SelectItem value="odvoz">Odvoz</SelectItem>
+                    <SelectItem value="ulaz">Ulaz</SelectItem>
+                    <SelectItem value="izlaz">Izlaz</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -328,20 +328,20 @@ export default function Materijal() {
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="shadow-card border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Ukupan dovoz</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium">Ukupan ulaz</CardTitle>
             <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-lg sm:text-2xl font-bold text-primary">{ukupanDovoz} m³</div>
+            <div className="text-lg sm:text-2xl font-bold text-primary">{ukupanUlaz} m³</div>
           </CardContent>
         </Card>
         <Card className="shadow-card border-accent/20">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Ukupan odvoz</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium">Ukupan izlaz</CardTitle>
             <ArrowUp className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
           </CardHeader>
           <CardContent>
-            <div className="text-lg sm:text-2xl font-bold text-accent">{ukupanOdvoz} m³</div>
+            <div className="text-lg sm:text-2xl font-bold text-accent">{ukupanIzlaz} m³</div>
           </CardContent>
         </Card>
         <Card className="shadow-card">
@@ -420,14 +420,14 @@ export default function Materijal() {
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <Badge variant={unos.smer === "dovoz" ? "default" : "secondary"}>
-                    {unos.smer === "dovoz" ? (
+                  <Badge variant={unos.smer === "ulaz" ? "default" : "secondary"}>
+                    {unos.smer === "ulaz" ? (
                       <span className="flex items-center gap-1">
-                        <ArrowDown className="h-3 w-3" /> Dovoz
+                        <ArrowDown className="h-3 w-3" /> Ulaz
                       </span>
                     ) : (
                       <span className="flex items-center gap-1">
-                        <ArrowUp className="h-3 w-3" /> Odvoz
+                        <ArrowUp className="h-3 w-3" /> Izlaz
                       </span>
                     )}
                   </Badge>
@@ -480,14 +480,14 @@ export default function Materijal() {
                       {unos.kolicina} {unos.jedinica}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={unos.smer === "dovoz" ? "default" : "secondary"} className="text-xs">
-                        {unos.smer === "dovoz" ? (
+                      <Badge variant={unos.smer === "ulaz" ? "default" : "secondary"} className="text-xs">
+                        {unos.smer === "ulaz" ? (
                           <span className="flex items-center gap-1">
-                            <ArrowDown className="h-3 w-3" /> Dovoz
+                            <ArrowDown className="h-3 w-3" /> Ulaz
                           </span>
                         ) : (
                           <span className="flex items-center gap-1">
-                            <ArrowUp className="h-3 w-3" /> Odvoz
+                            <ArrowUp className="h-3 w-3" /> Izlaz
                           </span>
                         )}
                       </Badge>
@@ -548,7 +548,7 @@ export default function Materijal() {
           <DialogHeader>
             <DialogTitle>Dodaj novi unos materijala</DialogTitle>
             <DialogDescription>
-              Unesite detalje o dovozu ili odvozu materijala
+              Unesite detalje o ulazu ili izlazu materijala
             </DialogDescription>
           </DialogHeader>
           <MaterijalForm onSave={handleSave} vozila={vozilaData} />
@@ -561,7 +561,7 @@ export default function Materijal() {
           <DialogHeader>
             <DialogTitle>Izmeni unos materijala</DialogTitle>
             <DialogDescription>
-              Ažurirajte detalje o dovozu ili odvozu materijala
+              Ažurirajte detalje o ulazu ili izlazu materijala
             </DialogDescription>
           </DialogHeader>
           <MaterijalForm onSave={handleUpdate} initialData={editingMaterijal} vozila={vozilaData} />
