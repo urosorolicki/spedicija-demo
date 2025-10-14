@@ -42,10 +42,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFinansije, createFinansija, updateFinansija, deleteFinansija } from "@/services/finansijeService";
+import { getVozila } from "@/services/vozilaService";
 
 export default function Finansije() {
   const { user } = useAuth();
   const [finansijeData, setFinansijeData] = useState<any[]>([]);
+  const [vozilaData, setVozilaData] = useState<any[]>([]);
   const [deletingFinansija, setDeletingFinansija] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -62,6 +64,7 @@ export default function Finansije() {
   useEffect(() => {
     if (user) {
       loadFinansije();
+      loadVozila();
     }
   }, [user]);
 
@@ -76,6 +79,15 @@ export default function Finansije() {
     setIsLoading(false);
   };
 
+  const loadVozila = async () => {
+    if (!user) return;
+    
+    const result = await getVozila(user.id);
+    if (result.success && result.vozila) {
+      setVozilaData(result.vozila);
+    }
+  };
+
   const handleSave = async (data: FinansijeData) => {
     if (!user) return;
     
@@ -85,6 +97,7 @@ export default function Finansije() {
       kategorija: data.kategorija,
       iznos: data.iznos,
       opis: data.opis,
+      vozilo: data.vozilo,
     } as any);
     
     if (result.success) {
@@ -107,6 +120,7 @@ export default function Finansije() {
       kategorija: data.kategorija,
       iznos: data.iznos,
       opis: data.opis,
+      vozilo: data.vozilo,
     } as any);
     
     if (result.success) {
@@ -490,7 +504,7 @@ export default function Finansije() {
               Unesite detalje o novom prihodu ili rashodu
             </DialogDescription>
           </DialogHeader>
-          <FinansijeForm onSave={handleSave} />
+          <FinansijeForm onSave={handleSave} vozila={vozilaData} />
         </DialogContent>
       </Dialog>
 
@@ -503,7 +517,7 @@ export default function Finansije() {
               Ažurirajte detalje o transakciji
             </DialogDescription>
           </DialogHeader>
-          <FinansijeForm onSave={handleUpdate} initialData={editingFinansija} />
+          <FinansijeForm onSave={handleUpdate} initialData={editingFinansija} vozila={vozilaData} />
         </DialogContent>
       </Dialog>
     </div>

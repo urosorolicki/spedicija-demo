@@ -8,6 +8,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 interface MaterijalFormProps {
   onSave: (data: MaterijalData) => void;
   initialData?: any;
+  vozila?: any[];
 }
 
 export interface MaterijalData {
@@ -25,7 +26,7 @@ const jedinice = ["kg", "t", "l", "m³"];
 const tipovi = ["Šljunak", "Pesak", "Kamen", "Agregat"];
 const smerovi = ["dovoz", "odvoz"];
 
-export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialData }) => {
+export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialData, vozila = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState<MaterijalData>({
     datum: initialData?.datum || "",
@@ -147,7 +148,20 @@ export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialDat
               </div>
               <div className="space-y-2">
                 <Label htmlFor="vozilo">Vozilo</Label>
-                <Input type="text" name="vozilo" id="vozilo" value={form.vozilo} onChange={handleChange} placeholder="Vozilo" />
+                <select 
+                  name="vozilo" 
+                  id="vozilo" 
+                  value={form.vozilo} 
+                  onChange={handleChange} 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value="">Izaberi vozilo</option>
+                  {vozila.map((vozilo) => (
+                    <option key={vozilo.$id} value={vozilo.naziv}>
+                      {vozilo.naziv}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>

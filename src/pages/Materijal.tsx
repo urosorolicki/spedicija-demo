@@ -42,10 +42,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { getMaterijali, createMaterijal, updateMaterijal, deleteMaterijal } from "@/services/materijalService";
+import { getVozila } from "@/services/vozilaService";
 
 export default function Materijal() {
   const { user } = useAuth();
   const [materijalData, setMaterijalData] = useState<any[]>([]);
+  const [vozilaData, setVozilaData] = useState<any[]>([]);
   const [deletingMaterijal, setDeletingMaterijal] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -62,6 +64,7 @@ export default function Materijal() {
   useEffect(() => {
     if (user) {
       loadMaterijali();
+      loadVozila();
     }
   }, [user]);
 
@@ -76,6 +79,15 @@ export default function Materijal() {
     setIsLoading(false);
   };
 
+  const loadVozila = async () => {
+    if (!user) return;
+    
+    const result = await getVozila(user.id);
+    if (result.success && result.vozila) {
+      setVozilaData(result.vozila);
+    }
+  };
+
   const handleSave = async (data: MaterijalData) => {
     if (!user) return;
     
@@ -85,6 +97,9 @@ export default function Materijal() {
       materijal: data.tip,
       tezina: data.kolicina,
       jedinica: data.jedinica,
+      lokacija: data.lokacija,
+      vozac: data.vozac,
+      vozilo: data.vozilo,
     } as any);
     
     if (result.success) {
@@ -107,6 +122,9 @@ export default function Materijal() {
       materijal: data.tip,
       tezina: data.kolicina,
       jedinica: data.jedinica,
+      lokacija: data.lokacija,
+      vozac: data.vozac,
+      vozilo: data.vozilo,
     } as any);
     
     if (result.success) {
@@ -533,7 +551,7 @@ export default function Materijal() {
               Unesite detalje o dovozu ili odvozu materijala
             </DialogDescription>
           </DialogHeader>
-          <MaterijalForm onSave={handleSave} />
+          <MaterijalForm onSave={handleSave} vozila={vozilaData} />
         </DialogContent>
       </Dialog>
 
@@ -546,7 +564,7 @@ export default function Materijal() {
               Ažurirajte detalje o dovozu ili odvozu materijala
             </DialogDescription>
           </DialogHeader>
-          <MaterijalForm onSave={handleUpdate} initialData={editingMaterijal} />
+          <MaterijalForm onSave={handleUpdate} initialData={editingMaterijal} vozila={vozilaData} />
         </DialogContent>
       </Dialog>
     </div>

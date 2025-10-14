@@ -8,6 +8,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 interface FinansijeFormProps {
   onSave: (data: FinansijeData) => void;
   initialData?: any;
+  vozila?: any[];
 }
 
 export interface FinansijeData {
@@ -22,7 +23,7 @@ export interface FinansijeData {
 const tipovi = ["prihod", "rashod"];
 const kategorije = ["Prevoz", "Gorivo", "Održavanje", "Investicija"];
 
-export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialData }) => {
+export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialData, vozila = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState<FinansijeData>({
     datum: initialData?.datum || "",
@@ -130,7 +131,21 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
               </div>
               <div className="space-y-2">
                 <Label htmlFor="vozilo">Vozilo</Label>
-                <Input type="text" name="vozilo" id="vozilo" value={form.vozilo} onChange={handleChange} placeholder="Vozilo" />
+                <select 
+                  name="vozilo" 
+                  id="vozilo" 
+                  value={form.vozilo} 
+                  onChange={handleChange} 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value="">Izaberi vozilo</option>
+                  <option value="Svi">Svi</option>
+                  {vozila.map((vozilo) => (
+                    <option key={vozilo.$id} value={vozilo.naziv}>
+                      {vozilo.naziv}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>

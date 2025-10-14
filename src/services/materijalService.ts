@@ -9,6 +9,9 @@ export interface Materijal extends Models.Document {
   tezina: number;
   jedinica: string;
   cena?: number;
+  lokacija?: string;
+  vozac?: string;
+  vozilo?: string;
 }
 
 /**
