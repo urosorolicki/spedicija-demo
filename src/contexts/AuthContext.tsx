@@ -31,7 +31,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const savedUser = localStorage.getItem('markovickop_user');
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+        
+        // Proveri da li user objekat ima 'id' polje
+        if (!parsedUser.id) {
+          // Stari format bez id polja - izloguj korisnika
+          console.warn('Old user format detected, clearing localStorage');
+          localStorage.removeItem('markovickop_user');
+          setUser(null);
+        } else {
+          setUser(parsedUser);
+        }
       } catch (error) {
         localStorage.removeItem('markovickop_user');
       }
