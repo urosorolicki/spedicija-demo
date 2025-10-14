@@ -80,6 +80,56 @@ export default function Dashboard() {
   const saldo = ukupniPrihodi - ukupniRashodi;
   const aktivnaVozila = vozilaData.filter((v) => v.status === "aktivan").length;
 
+  // Calculate trends by comparing current month vs previous month
+  const calculateTrend = (currentValue: number, previousValue: number) => {
+    if (previousValue === 0) return undefined;
+    const change = ((currentValue - previousValue) / previousValue) * 100;
+    return {
+      value: Math.abs(parseFloat(change.toFixed(1))),
+      positive: change >= 0,
+    };
+  };
+
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+  const currentMonthPrihodi = finansijeData
+    .filter((f) => {
+      const date = new Date(f.datum);
+      return f.tip === "prihod" && date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+    })
+    .reduce((sum, f) => sum + f.iznos, 0);
+
+  const lastMonthPrihodi = finansijeData
+    .filter((f) => {
+      const date = new Date(f.datum);
+      return f.tip === "prihod" && date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
+    })
+    .reduce((sum, f) => sum + f.iznos, 0);
+
+  const currentMonthRashodi = finansijeData
+    .filter((f) => {
+      const date = new Date(f.datum);
+      return f.tip === "rashod" && date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+    })
+    .reduce((sum, f) => sum + f.iznos, 0);
+
+  const lastMonthRashodi = finansijeData
+    .filter((f) => {
+      const date = new Date(f.datum);
+      return f.tip === "rashod" && date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
+    })
+    .reduce((sum, f) => sum + f.iznos, 0);
+
+  const prihodiTrend = calculateTrend(currentMonthPrihodi, lastMonthPrihodi);
+  const rashodiTrend = calculateTrend(currentMonthRashodi, lastMonthRashodi);
+  const currentMonthSaldo = currentMonthPrihodi - currentMonthRashodi;
+  const lastMonthSaldo = lastMonthPrihodi - lastMonthRashodi;
+  const saldoTrend = calculateTrend(currentMonthSaldo, lastMonthSaldo);
+
   const materijalPoTipu = materijalData.reduce((acc, item) => {
     const existing = acc.find((x) => x.tip === item.materijal);
     if (existing) {
@@ -134,19 +184,19 @@ export default function Dashboard() {
           title="Ukupni prihodi"
           value={`${ukupniPrihodi.toLocaleString("sr-RS")} RSD`}
           icon={DollarSign}
-          trend={{ value: 12.5, positive: true }}
+          trend={prihodiTrend}
         />
         <MetricCard
           title="Ukupni rashodi"
           value={`${ukupniRashodi.toLocaleString("sr-RS")} RSD`}
           icon={TrendingDown}
-          trend={{ value: 3.2, positive: false }}
+          trend={rashodiTrend}
         />
         <MetricCard
           title="Saldo"
           value={`${saldo.toLocaleString("sr-RS")} RSD`}
           icon={Wallet}
-          trend={{ value: 8.7, positive: true }}
+          trend={saldoTrend}
           className="border-accent"
         />
         <MetricCard
