@@ -10,8 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import finansijeData from "@/data/finansije.json";
-import vozilaData from "@/data/vozila.json";
 import { TrendingUp, TrendingDown, DollarSign, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -27,7 +25,12 @@ interface VehicleStats {
   status: string;
 }
 
-export const VehicleProfitability = () => {
+interface VehicleProfitabilityProps {
+  vozila: any[];
+  finansije: any[];
+}
+
+export const VehicleProfitability = ({ vozila = [], finansije = [] }: VehicleProfitabilityProps) => {
   const [period, setPeriod] = useState<Period>("month");
 
   const getDateRange = (period: Period) => {
@@ -56,7 +59,7 @@ export const VehicleProfitability = () => {
     const stats = new Map<string, VehicleStats>();
 
     // Initialize stats for all vehicles
-    vozilaData.forEach((vozilo) => {
+    vozila.forEach((vozilo) => {
       stats.set(vozilo.naziv, {
         naziv: vozilo.naziv,
         prihodi: 0,
@@ -68,7 +71,7 @@ export const VehicleProfitability = () => {
     });
 
     // Calculate income and expenses per vehicle
-    finansijeData.forEach((transakcija) => {
+    finansije.forEach((transakcija) => {
       const transakcijaDate = new Date(transakcija.datum);
       // Proveravamo da li je transakcija u opsegu datuma za izabrani period
       if (transakcijaDate >= startDate && transakcijaDate <= now) {
@@ -76,7 +79,7 @@ export const VehicleProfitability = () => {
 
         if (voziloNaziv === "Svi") {
           // Distribute evenly across all active vehicles
-          const activeVehicles = vozilaData.filter((v) => v.status === "aktivan");
+          const activeVehicles = vozila.filter((v) => v.status === "aktivan");
           const perVehicle = transakcija.iznos / activeVehicles.length;
 
           activeVehicles.forEach((vozilo) => {
@@ -109,7 +112,7 @@ export const VehicleProfitability = () => {
     });
 
     return Array.from(stats.values()).sort((a, b) => b.profit - a.profit);
-  }, [period]);
+  }, [period, vozila, finansije]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("sr-RS", {

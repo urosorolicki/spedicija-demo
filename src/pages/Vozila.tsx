@@ -34,10 +34,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { getVozila, createVozilo, updateVozilo, deleteVozilo } from "@/services/vozilaService";
+import { getFinansije } from "@/services/finansijeService";
 
 export default function Vozila() {
   const { user } = useAuth();
   const [vozilaData, setVozilaData] = useState<any[]>([]);
+  const [finansijeData, setFinansijeData] = useState<any[]>([]);
   const [editingVozilo, setEditingVozilo] = useState<any | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -61,10 +63,19 @@ export default function Vozila() {
     if (!user) return;
     
     setIsLoading(true);
-    const result = await getVozila(user.id);
-    if (result.success && result.vozila) {
-      setVozilaData(result.vozila);
+    const [vozilaResult, finansijeResult] = await Promise.all([
+      getVozila(user.id),
+      getFinansije(user.id),
+    ]);
+    
+    if (vozilaResult.success && vozilaResult.vozila) {
+      setVozilaData(vozilaResult.vozila);
     }
+    
+    if (finansijeResult.success && finansijeResult.finansije) {
+      setFinansijeData(finansijeResult.finansije);
+    }
+    
     setIsLoading(false);
   };
 
@@ -308,7 +319,7 @@ export default function Vozila() {
         </CardContent>
       </Card>
 
-      <VehicleProfitability />
+      <VehicleProfitability vozila={vozilaData} finansije={finansijeData} />
       
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

@@ -15,10 +15,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import finansijeData from "@/data/finansije.json";
-import materijalData from "@/data/materijal.json";
-import vozilaDataJson from "@/data/vozila.json";
-import mesecniData from "@/data/mesecniPodaci.json";
 import {
   Table,
   TableBody,
@@ -29,20 +25,50 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { getFinansije } from "@/services/finansijeService";
+import { getMaterijali } from "@/services/materijalService";
+import { getVozila } from "@/services/vozilaService";
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [vozilaData, setVozilaData] = useState<any[]>([]);
+  const [finansijeData, setFinansijeData] = useState<any[]>([]);
+  const [materijalData, setMaterijalData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem("markovickop_vozila");
-    if (stored) {
-      try {
-        setVozilaData(JSON.parse(stored));
-        return;
-      } catch {}
+    if (user) {
+      loadAllData();
     }
-    setVozilaData(vozilaDataJson);
-  }, []);
+  }, [user]);
+
+  const loadAllData = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    
+    const [vozilaResult, finansijeResult, materijalResult] = await Promise.all([
+      getVozila(user.id),
+      getFinansije(user.id),
+      getMaterijali(user.id),
+    ]);
+    
+    if (vozilaResult.success && vozilaResult.vozila) {
+      setVozilaData(vozilaResult.vozila);
+    }
+    
+    if (finansijeResult.success && finansijeResult.finansije) {
+      setFinansijeData(finansijeResult.finansije);
+    }
+    
+    if (materijalResult.success && materijalResult.materijali) {
+      setMaterijalData(materijalResult.materijali);
+    }
+    
+    setIsLoading(false);
+  };
+  
   const ukupniPrihodi = finansijeData
     .filter((f) => f.tip === "prihod")
     .reduce((sum, f) => sum + f.iznos, 0);
@@ -55,19 +81,41 @@ export default function Dashboard() {
   const aktivnaVozila = vozilaData.filter((v) => v.status === "aktivan").length;
 
   const materijalPoTipu = materijalData.reduce((acc, item) => {
-    const existing = acc.find((x) => x.tip === item.tip);
+    const existing = acc.find((x) => x.tip === item.materijal);
     if (existing) {
-      existing.dovoz += item.smer === "dovoz" ? item.kolicina : 0;
-      existing.odvoz += item.smer === "odvoz" ? item.kolicina : 0;
+      existing.dovoz += item.tip === "dovoz" ? item.tezina : 0;
+      existing.odvoz += item.tip === "odvoz" ? item.tezina : 0;
     } else {
       acc.push({
-        tip: item.tip,
-        dovoz: item.smer === "dovoz" ? item.kolicina : 0,
-        odvoz: item.smer === "odvoz" ? item.kolicina : 0,
+        tip: item.materijal,
+        dovoz: item.tip === "dovoz" ? item.tezina : 0,
+        odvoz: item.tip === "odvoz" ? item.tezina : 0,
       });
     }
     return acc;
   }, [] as { tip: string; dovoz: number; odvoz: number }[]);
+
+  // Generate monthly data from finansije
+  const mesecniData = finansijeData.reduce((acc, item) => {
+    const date = new Date(item.datum);
+    const mesec = date.toLocaleDateString('sr-RS', { month: 'short' });
+    const existing = acc.find((x) => x.mesec === mesec);
+    
+    if (existing) {
+      if (item.tip === 'prihod') {
+        existing.prihodi += item.iznos;
+      } else {
+        existing.rashodi += item.iznos;
+      }
+    } else {
+      acc.push({
+        mesec,
+        prihodi: item.tip === 'prihod' ? item.iznos : 0,
+        rashodi: item.tip === 'rashod' ? item.iznos : 0,
+      });
+    }
+    return acc;
+  }, [] as { mesec: string; prihodi: number; rashodi: number }[]);
 
   const poslednjeTransakcije = finansijeData.slice(0, 10);
 
