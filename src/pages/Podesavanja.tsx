@@ -3,13 +3,16 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Settings, Save, Bell, Shield, User, Loader2 } from "lucide-react";
+import { Settings, Save, Bell, Shield, User, Loader2, CheckCircle2, Lock } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 export default function Podesavanja() {
   const { user, changePassword } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [profileData, setProfileData] = useState({
     ime: user?.username || "",
     email: user?.email || "",
@@ -36,20 +39,15 @@ export default function Podesavanja() {
       return;
     }
     
-    if (passwordData.newPassword.length < 6) {
-      setPasswordError("Nova lozinka mora imati najmanje 6 karaktera");
-      return;
-    }
-    
     setIsChangingPassword(true);
     
     try {
-      const success = await changePassword(passwordData.oldPassword, passwordData.newPassword);
-      if (success) {
+      const result = await changePassword(passwordData.oldPassword, passwordData.newPassword);
+      if (result.success) {
         setPasswordSuccess("Lozinka je uspešno promenjena!");
         setPasswordData({ oldPassword: "", newPassword: "", confirmPassword: "" });
       } else {
-        setPasswordError("Stara lozinka nije ispravna");
+        setPasswordError(result.error || "Došlo je do greške prilikom promene lozinke");
       }
     } catch (error) {
       setPasswordError("Došlo je do greške prilikom promene lozinke");
@@ -247,7 +245,7 @@ export default function Podesavanja() {
                   Omogući tamni režim interfejsa
                 </p>
               </div>
-              <Switch />
+              <Switch checked={theme === "dark"} onCheckedChange={toggleTheme} />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -257,6 +255,67 @@ export default function Podesavanja() {
                 </p>
               </div>
               <Switch defaultChecked />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-card border-success/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
+              Status bezbednosti
+            </CardTitle>
+            <CardDescription className="text-sm">Pregled sigurnosnih funkcija</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-sm font-medium">SHA-256 Hash lozinke</span>
+              </div>
+              <Badge variant="outline" className="bg-success/20 text-success border-success">
+                Aktivno
+              </Badge>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-sm font-medium">XSS zaštita (DOMPurify)</span>
+              </div>
+              <Badge variant="outline" className="bg-success/20 text-success border-success">
+                Aktivno
+              </Badge>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-sm font-medium">Rate limiting (5 pokušaja/15 min)</span>
+              </div>
+              <Badge variant="outline" className="bg-success/20 text-success border-success">
+                Aktivno
+              </Badge>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-sm font-medium">Jaka lozinka (8+ karaktera, velika/mala slova, broj, specijalan karakter)</span>
+              </div>
+              <Badge variant="outline" className="bg-success/20 text-success border-success">
+                Aktivno
+              </Badge>
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                <span className="text-sm font-medium">Input sanitizacija</span>
+              </div>
+              <Badge variant="outline" className="bg-success/20 text-success border-success">
+                Aktivno
+              </Badge>
             </div>
           </CardContent>
         </Card>

@@ -17,13 +17,43 @@ import {
 } from "@/components/ui/dropdown-menu";
 import materijalDataJson from "@/data/materijal.json";
 import { MaterijalForm, MaterijalData } from "@/components/MaterijalForm";
-import React, { useState, useEffect } from "react";
-import { Package, ArrowUp, ArrowDown, Download } from "lucide-react";
+import { MaterijalChart } from "@/components/MaterijalChart";
+import React, { useState, useEffect, useMemo } from "react";
+import { Package, ArrowUp, ArrowDown, Download, Trash2, Search, Plus } from "lucide-react";
 import { exportToJSON, exportToCSV, exportToPDF } from "@/lib/export";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Materijal() {
   const STORAGE_KEY = "markovickop_materijal";
   const [materijalData, setMaterijalData] = useState<any[]>([]);
+  const [deletingMaterijal, setDeletingMaterijal] = useState<any | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [smerFilter, setSmerFilter] = useState<string>("svi");
+  const [tipFilter, setTipFilter] = useState<string>("svi");
+  const [sortBy, setSortBy] = useState<string>("datum-desc");
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -45,13 +75,79 @@ export default function Materijal() {
     const noviUnosi = [noviMaterijal, ...materijalData];
     setMaterijalData(noviUnosi);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(noviUnosi));
+    setIsAddDialogOpen(false);
   };
 
-  const ukupanDovoz = materijalData
+  const handleDelete = (materijal: any) => {
+    setDeletingMaterijal(materijal);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (deletingMaterijal) {
+      const updatedMaterijal = materijalData.filter((m) => m.id !== deletingMaterijal.id);
+      setMaterijalData(updatedMaterijal);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedMaterijal));
+    }
+    setIsDeleteDialogOpen(false);
+    setDeletingMaterijal(null);
+  };
+
+  // Get unique material types for filter
+  const uniqueTipovi = useMemo(() => {
+    const tipovi = [...new Set(materijalData.map((m) => m.tip))];
+    return tipovi.sort();
+  }, [materijalData]);
+
+  // Filtered and sorted data
+  const filteredData = useMemo(() => {
+    let filtered = [...materijalData];
+
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter((m) =>
+        m.tip?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.lokacija?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.vozac?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.vozilo?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Smer filter
+    if (smerFilter !== "svi") {
+      filtered = filtered.filter((m) => m.smer === smerFilter);
+    }
+
+    // Tip filter
+    if (tipFilter !== "svi") {
+      filtered = filtered.filter((m) => m.tip === tipFilter);
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "datum-desc":
+          return new Date(b.datum).getTime() - new Date(a.datum).getTime();
+        case "datum-asc":
+          return new Date(a.datum).getTime() - new Date(b.datum).getTime();
+        case "kolicina-desc":
+          return b.kolicina - a.kolicina;
+        case "kolicina-asc":
+          return a.kolicina - b.kolicina;
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [materijalData, searchQuery, smerFilter, tipFilter, sortBy]);
+
+  // Calculate totals from filtered data
+  const ukupanDovoz = filteredData
     .filter((m) => m.smer === "dovoz")
     .reduce((sum, m) => sum + Number(m.kolicina), 0);
 
-  const ukupanOdvoz = materijalData
+  const ukupanOdvoz = filteredData
     .filter((m) => m.smer === "odvoz")
     .reduce((sum, m) => sum + Number(m.kolicina), 0);
 
@@ -61,13 +157,13 @@ export default function Materijal() {
     
     switch (format) {
       case "json":
-        exportToJSON(materijalData, filename);
+        exportToJSON(filteredData, filename);
         break;
       case "csv":
-        exportToCSV(materijalData, filename);
+        exportToCSV(filteredData, filename);
         break;
       case "pdf":
-        exportToPDF(materijalData, filename, "Materijal");
+        exportToPDF(filteredData, filename, "Materijal");
         break;
     }
   };
@@ -99,7 +195,79 @@ export default function Materijal() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <MaterijalForm onSave={handleSave} />
+
+      {/* Search and Filter Section */}
+      <Card className="shadow-card border-accent/20">
+        <CardContent className="pt-6">
+          <div className="flex flex-col gap-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Pretraži po tipu, lokaciji, vozaču ili vozilu..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            {/* Filters */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Smer</label>
+                <Select value={smerFilter} onValueChange={setSmerFilter}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="svi">Svi</SelectItem>
+                    <SelectItem value="dovoz">Dovoz</SelectItem>
+                    <SelectItem value="odvoz">Odvoz</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Tip materijala</label>
+                <Select value={tipFilter} onValueChange={setTipFilter}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="svi">Svi</SelectItem>
+                    {uniqueTipovi.map((tip) => (
+                      <SelectItem key={tip} value={tip}>
+                        {tip}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Sortiraj</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="datum-desc">Najnovije</SelectItem>
+                    <SelectItem value="datum-asc">Najstarije</SelectItem>
+                    <SelectItem value="kolicina-desc">Količina (najveća)</SelectItem>
+                    <SelectItem value="kolicina-asc">Količina (najmanja)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Results count */}
+            <p className="text-xs text-muted-foreground">
+              Prikazano <span className="font-medium">{filteredData.length}</span> od {materijalData.length} unosa
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="shadow-card border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -126,11 +294,33 @@ export default function Materijal() {
           </CardHeader>
           <CardContent>
             <div className="text-lg sm:text-2xl font-bold text-foreground">
-              {materijalData.length}
+              {filteredData.length}
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Chart */}
+      <MaterijalChart data={materijalData} />
+      
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Potvrdi brisanje</AlertDialogTitle>
+            <AlertDialogDescription>
+              Da li ste sigurni da želite da obrišete ovaj unos materijala?
+              Ova akcija se ne može poništiti.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Otkaži</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">
+              Obriši
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Card className="shadow-card">
         <CardHeader>
           <CardTitle className="text-lg">Svi unosi</CardTitle>
@@ -147,10 +337,11 @@ export default function Materijal() {
                   <TableHead className="hidden sm:table-cell text-xs sm:text-sm">Vozilo</TableHead>
                   <TableHead className="hidden md:table-cell text-xs sm:text-sm">Vozač</TableHead>
                   <TableHead className="hidden lg:table-cell text-xs sm:text-sm">Lokacija</TableHead>
+                  <TableHead className="text-xs sm:text-sm w-[50px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {materijalData.map((unos) => (
+                {filteredData.map((unos) => (
                   <TableRow key={unos.id} className="hover:bg-muted/50">
                     <TableCell className="font-medium text-xs sm:text-sm">
                       {new Date(unos.datum).toLocaleDateString("sr-RS")}
@@ -175,6 +366,16 @@ export default function Materijal() {
                     <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{unos.vozilo}</TableCell>
                     <TableCell className="hidden md:table-cell text-xs sm:text-sm">{unos.vozac}</TableCell>
                     <TableCell className="hidden lg:table-cell max-w-xs truncate text-xs sm:text-sm">{unos.lokacija}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDelete(unos)}
+                        className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -182,6 +383,38 @@ export default function Materijal() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Floating Action Button */}
+      <AnimatePresence>
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="fixed bottom-6 right-6 z-50"
+        >
+          <Button
+            size="lg"
+            onClick={() => setIsAddDialogOpen(true)}
+            className="h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Add Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Dodaj novi unos materijala</DialogTitle>
+            <DialogDescription>
+              Unesite detalje o dovozu ili odvozu materijala
+            </DialogDescription>
+          </DialogHeader>
+          <MaterijalForm onSave={handleSave} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

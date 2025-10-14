@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { hashPassword, verifyPassword, sanitizeInput, loginRateLimiter, validatePasswordStrength } from '@/lib/security';
 
 interface User {
   username: string;
@@ -7,10 +8,10 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
-  changePassword: (oldPassword: string, newPassword: string) => Promise<boolean>;
-  addUser: (username: string, password: string, email: string) => Promise<boolean>;
+  changePassword: (oldPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  addUser: (username: string, password: string, email: string) => Promise<{ success: boolean; error?: string }>;
   isLoading: boolean;
 }
 
@@ -56,19 +57,50 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    // Sanitize inputs
+    const cleanUsername = sanitizeInput(username);
+    const cleanPassword = sanitizeInput(password);
+    
+    // Rate limiting check
+    if (!loginRateLimiter.checkLimit(cleanUsername)) {
+      const remainingTime = loginRateLimiter.getRemainingTime(cleanUsername);
+      return { 
+        success: false, 
+        error: `Previše neuspešnih pokušaja. Pokušajte ponovo za ${remainingTime} minuta.` 
+      };
+    }
+    
     await new Promise(resolve => setTimeout(resolve, 500));
     const users = getUsers();
-    const foundUser = users.find(
-      u => u.username === username && u.password === password
-    );
-    if (foundUser) {
+    const foundUser = users.find(u => u.username === cleanUsername);
+    
+    if (!foundUser) {
+      return { success: false, error: "Pogrešno korisničko ime ili lozinka" };
+    }
+    
+    // Verify password (check if hashed or plain)
+    let isValid = false;
+    if (foundUser.password.length === 64) { // Hashed password
+      isValid = await verifyPassword(cleanPassword, foundUser.password);
+    } else { // Legacy plain password
+      isValid = foundUser.password === cleanPassword;
+      // Upgrade to hashed password
+      if (isValid) {
+        foundUser.password = await hashPassword(cleanPassword);
+        saveUsers(users);
+      }
+    }
+    
+    if (isValid) {
       const userData = { username: foundUser.username, email: foundUser.email };
       setUser(userData);
       localStorage.setItem('markovickop_user', JSON.stringify(userData));
-      return true;
+      loginRateLimiter.reset(cleanUsername); // Reset on successful login
+      return { success: true };
     }
-    return false;
+    
+    return { success: false, error: "Pogrešno korisničko ime ili lozinka" };
   };
 
   const logout = () => {
@@ -76,28 +108,68 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('markovickop_user');
   };
 
-  const changePassword = async (oldPassword: string, newPassword: string): Promise<boolean> => {
-    if (!user) return false;
+  const changePassword = async (oldPassword: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
+    if (!user) return { success: false, error: "Niste ulogovani" };
+    
+    // Validate new password strength
+    const validation = validatePasswordStrength(newPassword);
+    if (!validation.valid) {
+      return { success: false, error: validation.errors[0] };
+    }
+    
     await new Promise(resolve => setTimeout(resolve, 500));
     const users = getUsers();
     const userIndex = users.findIndex(u => u.username === user.username);
-    if (userIndex === -1 || users[userIndex].password !== oldPassword) {
-      return false;
+    
+    if (userIndex === -1) {
+      return { success: false, error: "Korisnik nije pronađen" };
     }
-    users[userIndex].password = newPassword;
+    
+    // Verify old password
+    let isValid = false;
+    if (users[userIndex].password.length === 64) {
+      isValid = await verifyPassword(oldPassword, users[userIndex].password);
+    } else {
+      isValid = users[userIndex].password === oldPassword;
+    }
+    
+    if (!isValid) {
+      return { success: false, error: "Stara lozinka nije ispravna" };
+    }
+    
+    // Hash and save new password
+    users[userIndex].password = await hashPassword(newPassword);
     saveUsers(users);
-    return true;
+    return { success: true };
   };
 
-  const addUser = async (username: string, password: string, email: string): Promise<boolean> => {
+  const addUser = async (username: string, password: string, email: string): Promise<{ success: boolean; error?: string }> => {
+    // Sanitize inputs
+    const cleanUsername = sanitizeInput(username);
+    const cleanEmail = sanitizeInput(email);
+    
+    // Validate password strength
+    const validation = validatePasswordStrength(password);
+    if (!validation.valid) {
+      return { success: false, error: validation.errors[0] };
+    }
+    
     await new Promise(resolve => setTimeout(resolve, 500));
     const users = getUsers();
-    if (users.some(u => u.username === username || u.email === email)) {
-      return false; // korisnik već postoji
+    
+    if (users.some(u => u.username === cleanUsername)) {
+      return { success: false, error: "Korisničko ime već postoji" };
     }
-    users.push({ username, password, email });
+    
+    if (users.some(u => u.email === cleanEmail)) {
+      return { success: false, error: "Email već postoji" };
+    }
+    
+    // Hash password before storing
+    const hashedPassword = await hashPassword(password);
+    users.push({ username: cleanUsername, password: hashedPassword, email: cleanEmail });
     saveUsers(users);
-    return true;
+    return { success: true };
   };
 
   return (

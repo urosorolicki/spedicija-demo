@@ -1,5 +1,6 @@
 import { DollarSign, TrendingDown, Wallet, Truck } from "lucide-react";
 import { MetricCard } from "@/components/MetricCard";
+import { DashboardChart } from "@/components/DashboardChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LineChart,
@@ -90,6 +91,13 @@ export default function Dashboard() {
           className="border-accent"
         />
       </div>
+
+      {/* Dashboard Charts */}
+      <DashboardChart 
+        finansijeData={finansijeData}
+        materijalData={materijalData}
+        vozilaData={vozilaData}
+      />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="shadow-card">

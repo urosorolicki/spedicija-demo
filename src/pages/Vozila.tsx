@@ -15,17 +15,38 @@ import {
 } from "@/components/ui/dropdown-menu";
 import vozilaDataJson from "@/data/vozila.json";
 import { VozilaForm, VoziloData } from "@/components/VozilaForm";
-import React, { useState, useEffect } from "react";
-import { Truck, Calendar, Gauge, Settings, Pencil, Download } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useMemo } from "react";
+import { Truck, Calendar, Gauge, Settings, Pencil, Download, Trash2, Search, Plus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { VehicleProfitability } from "@/components/VehicleProfitability";
 import { exportToJSON, exportToCSV, exportToPDF } from "@/lib/export";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Vozila() {
   const STORAGE_KEY = "markovickop_vozila";
   const [vozilaData, setVozilaData] = useState<any[]>([]);
   const [editingVozilo, setEditingVozilo] = useState<any | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [deletingVozilo, setDeletingVozilo] = useState<any | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [tipFilter, setTipFilter] = useState<string>("svi");
+  const [statusFilter, setStatusFilter] = useState<string>("svi");
+  const [sortBy, setSortBy] = useState<string>("naziv");
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -47,11 +68,12 @@ export default function Vozila() {
     const novaVozila = [novoVozilo, ...vozilaData];
     setVozilaData(novaVozila);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(novaVozila));
+    setIsAddDialogOpen(false);
   };
 
   const handleEdit = (vozilo: any) => {
     setEditingVozilo(vozilo);
-    setIsDialogOpen(true);
+    setIsEditDialogOpen(true);
   };
 
   const handleUpdate = (data: VoziloData) => {
@@ -60,14 +82,79 @@ export default function Vozila() {
     );
     setVozilaData(updatedVozila);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedVozila));
-    setIsDialogOpen(false);
+    setIsEditDialogOpen(false);
     setEditingVozilo(null);
   };
 
   const handleCancelEdit = () => {
-    setIsDialogOpen(false);
+    setIsEditDialogOpen(false);
     setEditingVozilo(null);
   };
+
+  const handleDelete = (vozilo: any) => {
+    setDeletingVozilo(vozilo);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (deletingVozilo) {
+      const updatedVozila = vozilaData.filter((v) => v.id !== deletingVozilo.id);
+      setVozilaData(updatedVozila);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedVozila));
+    }
+    setIsDeleteDialogOpen(false);
+    setDeletingVozilo(null);
+  };
+
+  // Get unique types for filter
+  const uniqueTipovi = useMemo(() => {
+    const tipovi = [...new Set(vozilaData.map((v) => v.tip))];
+    return tipovi.sort();
+  }, [vozilaData]);
+
+  // Filtered and sorted data
+  const filteredData = useMemo(() => {
+    let filtered = [...vozilaData];
+
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter((v) =>
+        v.naziv?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        v.registracija?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        v.tip?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Tip filter
+    if (tipFilter !== "svi") {
+      filtered = filtered.filter((v) => v.tip === tipFilter);
+    }
+
+    // Status filter
+    if (statusFilter !== "svi") {
+      filtered = filtered.filter((v) => v.status === statusFilter);
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "naziv":
+          return a.naziv.localeCompare(b.naziv);
+        case "kilometraza-desc":
+          return b.kilometraza - a.kilometraza;
+        case "kilometraza-asc":
+          return a.kilometraza - b.kilometraza;
+        case "godiste-desc":
+          return b.godiste - a.godiste;
+        case "godiste-asc":
+          return a.godiste - b.godiste;
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [vozilaData, searchQuery, tipFilter, statusFilter, sortBy]);
 
   const handleExport = (format: "json" | "csv" | "pdf") => {
     const timestamp = new Date().toISOString().split("T")[0];
@@ -75,13 +162,13 @@ export default function Vozila() {
     
     switch (format) {
       case "json":
-        exportToJSON(vozilaData, filename);
+        exportToJSON(filteredData, filename);
         break;
       case "csv":
-        exportToCSV(vozilaData, filename);
+        exportToCSV(filteredData, filename);
         break;
       case "pdf":
-        exportToPDF(vozilaData, filename, "Vozila");
+        exportToPDF(filteredData, filename, "Vozila");
         break;
     }
   };
@@ -113,10 +200,84 @@ export default function Vozila() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <VozilaForm onSave={handleSave} />
+
+      {/* Search and Filter Section */}
+      <Card className="shadow-card border-accent/20">
+        <CardContent className="pt-6">
+          <div className="flex flex-col gap-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Pretraži po nazivu, registraciji ili tipu..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            {/* Filters */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Tip vozila</label>
+                <Select value={tipFilter} onValueChange={setTipFilter}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="svi">Svi</SelectItem>
+                    {uniqueTipovi.map((tip) => (
+                      <SelectItem key={tip} value={tip}>
+                        {tip}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Status</label>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="svi">Svi</SelectItem>
+                    <SelectItem value="aktivan">Aktivan</SelectItem>
+                    <SelectItem value="neaktivan">Neaktivan</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Sortiraj</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="naziv">Naziv (A-Z)</SelectItem>
+                    <SelectItem value="kilometraza-desc">Kilometraža (najveća)</SelectItem>
+                    <SelectItem value="kilometraza-asc">Kilometraža (najmanja)</SelectItem>
+                    <SelectItem value="godiste-desc">Godište (najnovije)</SelectItem>
+                    <SelectItem value="godiste-asc">Godište (najstarije)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Results count */}
+            <p className="text-xs text-muted-foreground">
+              Prikazano <span className="font-medium">{filteredData.length}</span> od {vozilaData.length} vozila
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       <VehicleProfitability />
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Izmeni vozilo</DialogTitle>
@@ -131,8 +292,26 @@ export default function Vozila() {
         </DialogContent>
       </Dialog>
 
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Potvrdi brisanje</AlertDialogTitle>
+            <AlertDialogDescription>
+              Da li ste sigurni da želite da obrišete vozilo <strong>{deletingVozilo?.naziv}</strong>?
+              Ova akcija se ne može poništiti.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Otkaži</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">
+              Obriši
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {vozilaData.map((vozilo, index) => (
+        {filteredData.map((vozilo, index) => (
           <motion.div
             key={vozilo.id}
             initial={{ opacity: 0, y: 20 }}
@@ -162,6 +341,14 @@ export default function Vozila() {
                       className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                     >
                       <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDelete(vozilo)}
+                      className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                 </div>
@@ -208,6 +395,35 @@ export default function Vozila() {
           </motion.div>
         ))}
       </div>
+
+      {/* Floating Action Button */}
+      <AnimatePresence>
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="fixed bottom-6 right-6 z-50"
+        >
+          <Button
+            size="lg"
+            onClick={() => setIsAddDialogOpen(true)}
+            className="h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Add Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Dodaj novo vozilo</DialogTitle>
+          </DialogHeader>
+          <VozilaForm onSave={handleSave} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

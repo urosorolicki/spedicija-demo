@@ -22,9 +22,9 @@ export const Login = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(username, password);
-      if (!success) {
-        setError("Pogrešno korisničko ime ili lozinka");
+      const result = await login(username, password);
+      if (!result.success) {
+        setError(result.error || "Došlo je do greške prilikom prijave");
       }
     } catch (error) {
       setError("Došlo je do greške prilikom prijave");
