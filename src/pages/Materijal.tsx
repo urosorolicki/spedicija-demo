@@ -15,7 +15,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import materijalDataJson from "@/data/materijal.json";
 import { MaterijalForm, MaterijalData } from "@/components/MaterijalForm";
 import { MaterijalChart } from "@/components/MaterijalChart";
 import React, { useState, useEffect, useMemo } from "react";
@@ -41,15 +40,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/contexts/AuthContext";
+import { getMaterijali, createMaterijal, updateMaterijal, deleteMaterijal } from "@/services/materijalService";
 
 export default function Materijal() {
-  const STORAGE_KEY = "markovickop_materijal";
+  const { user } = useAuth();
   const [materijalData, setMaterijalData] = useState<any[]>([]);
   const [deletingMaterijal, setDeletingMaterijal] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingMaterijal, setEditingMaterijal] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,26 +60,37 @@ export default function Materijal() {
   const [sortBy, setSortBy] = useState<string>("datum-desc");
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setMaterijalData(JSON.parse(stored));
-        return;
-      } catch {}
+    if (user) {
+      loadMaterijali();
     }
-    setMaterijalData(materijalDataJson);
-  }, []);
+  }, [user]);
 
-  const handleSave = (data: MaterijalData) => {
-    const id = Date.now();
-    const noviMaterijal = {
-      ...data,
-      id,
-    };
-    const noviUnosi = [noviMaterijal, ...materijalData];
-    setMaterijalData(noviUnosi);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(noviUnosi));
-    setIsAddDialogOpen(false);
+  const loadMaterijali = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    const result = await getMaterijali(user.id);
+    if (result.success && result.materijali) {
+      setMaterijalData(result.materijali);
+    }
+    setIsLoading(false);
+  };
+
+  const handleSave = async (data: MaterijalData) => {
+    if (!user) return;
+    
+    const result = await createMaterijal(user.id, {
+      datum: data.datum,
+      tip: data.smer as 'dovoz' | 'odvoz',
+      materijal: data.tip,
+      tezina: data.kolicina,
+      jedinica: data.jedinica,
+    } as any);
+    
+    if (result.success) {
+      await loadMaterijali();
+      setIsAddDialogOpen(false);
+    }
   };
 
   const handleEdit = (materijal: any) => {
@@ -85,14 +98,19 @@ export default function Materijal() {
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdate = (data: MaterijalData) => {
-    if (editingMaterijal) {
-      const updatedMaterijal = { ...data, id: editingMaterijal.id };
-      const updatedData = materijalData.map((m) =>
-        m.id === editingMaterijal.id ? updatedMaterijal : m
-      );
-      setMaterijalData(updatedData);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+  const handleUpdate = async (data: MaterijalData) => {
+    if (!editingMaterijal) return;
+    
+    const result = await updateMaterijal(editingMaterijal.$id, {
+      datum: data.datum,
+      tip: data.smer as 'dovoz' | 'odvoz',
+      materijal: data.tip,
+      tezina: data.kolicina,
+      jedinica: data.jedinica,
+    } as any);
+    
+    if (result.success) {
+      await loadMaterijali();
       setIsEditDialogOpen(false);
       setEditingMaterijal(null);
     }
@@ -103,11 +121,12 @@ export default function Materijal() {
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deletingMaterijal) {
-      const updatedMaterijal = materijalData.filter((m) => m.id !== deletingMaterijal.id);
-      setMaterijalData(updatedMaterijal);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedMaterijal));
+      const result = await deleteMaterijal(deletingMaterijal.$id);
+      if (result.success) {
+        await loadMaterijali();
+      }
     }
     setIsDeleteDialogOpen(false);
     setDeletingMaterijal(null);

@@ -36,7 +36,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { validatePasswordStrength } from "@/lib/security";
 
 export default function AdminPanel() {
-  const { addUser } = useAuth();
+  const { addUser, getAllUsers, deleteUser } = useAuth();
   const [users, setUsers] = useState<any[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -57,14 +57,10 @@ export default function AdminPanel() {
     loadUsers();
   }, []);
 
-  const loadUsers = () => {
-    const stored = localStorage.getItem("markovickop_users");
-    if (stored) {
-      try {
-        setUsers(JSON.parse(stored));
-      } catch {
-        setUsers([]);
-      }
+  const loadUsers = async () => {
+    const result = await getAllUsers();
+    if (result.success && result.users) {
+      setUsers(result.users);
     }
   };
 
@@ -128,13 +124,21 @@ export default function AdminPanel() {
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deletingUser) {
-      const updatedUsers = users.filter((u) => u.username !== deletingUser.username);
-      localStorage.setItem("markovickop_users", JSON.stringify(updatedUsers));
-      setUsers(updatedUsers);
-      setSuccess(`Korisnik ${deletingUser.username} je obrisan`);
-      setTimeout(() => setSuccess(""), 3000);
+      setIsLoading(true);
+      const result = await deleteUser(deletingUser.$id);
+      
+      if (result.success) {
+        setSuccess(`Korisnik ${deletingUser.username} je obrisan`);
+        setTimeout(() => setSuccess(""), 3000);
+        await loadUsers(); // Refresh users list
+      } else {
+        setError(result.error || "Greška pri brisanju korisnika");
+        setTimeout(() => setError(""), 3000);
+      }
+      
+      setIsLoading(false);
     }
     setIsDeleteDialogOpen(false);
     setDeletingUser(null);

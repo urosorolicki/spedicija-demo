@@ -13,7 +13,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import vozilaDataJson from "@/data/vozila.json";
 import { VozilaForm, VoziloData } from "@/components/VozilaForm";
 import { VehicleNotifications } from "@/components/VehicleNotifications";
 import React, { useState, useEffect, useMemo } from "react";
@@ -33,15 +32,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/contexts/AuthContext";
+import { getVozila, createVozilo, updateVozilo, deleteVozilo } from "@/services/vozilaService";
 
 export default function Vozila() {
-  const STORAGE_KEY = "markovickop_vozila";
+  const { user } = useAuth();
   const [vozilaData, setVozilaData] = useState<any[]>([]);
   const [editingVozilo, setEditingVozilo] = useState<any | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [deletingVozilo, setDeletingVozilo] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,26 +52,37 @@ export default function Vozila() {
   const [sortBy, setSortBy] = useState<string>("naziv");
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setVozilaData(JSON.parse(stored));
-        return;
-      } catch {}
+    if (user) {
+      loadVozila();
     }
-    setVozilaData(vozilaDataJson);
-  }, []);
+  }, [user]);
 
-  const handleSave = (data: VoziloData) => {
-    const id = Date.now();
-    const novoVozilo = {
-      ...data,
-      id,
-    };
-    const novaVozila = [novoVozilo, ...vozilaData];
-    setVozilaData(novaVozila);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(novaVozila));
-    setIsAddDialogOpen(false);
+  const loadVozila = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    const result = await getVozila(user.id);
+    if (result.success && result.vozila) {
+      setVozilaData(result.vozila);
+    }
+    setIsLoading(false);
+  };
+
+  const handleSave = async (data: VoziloData) => {
+    if (!user) return;
+    
+    const result = await createVozilo(user.id, {
+      registracija: data.registracija,
+      tipVozila: data.tip,
+      nosivost: data.nosivost,
+      sledecaRevizijaGorivo: data.sledecaRevizijaGorivo,
+      sledecaRegistracija: data.sledecaRegistracija,
+    } as any);
+    
+    if (result.success) {
+      await loadVozila();
+      setIsAddDialogOpen(false);
+    }
   };
 
   const handleEdit = (vozilo: any) => {
@@ -77,14 +90,22 @@ export default function Vozila() {
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdate = (data: VoziloData) => {
-    const updatedVozila = vozilaData.map((v) =>
-      v.id === editingVozilo.id ? { ...data, id: editingVozilo.id } : v
-    );
-    setVozilaData(updatedVozila);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedVozila));
-    setIsEditDialogOpen(false);
-    setEditingVozilo(null);
+  const handleUpdate = async (data: VoziloData) => {
+    if (!editingVozilo) return;
+    
+    const result = await updateVozilo(editingVozilo.$id, {
+      registracija: data.registracija,
+      tipVozila: data.tip,
+      nosivost: data.nosivost,
+      sledecaRevizijaGorivo: data.sledecaRevizijaGorivo,
+      sledecaRegistracija: data.sledecaRegistracija,
+    } as any);
+    
+    if (result.success) {
+      await loadVozila();
+      setIsEditDialogOpen(false);
+      setEditingVozilo(null);
+    }
   };
 
   const handleCancelEdit = () => {
@@ -97,11 +118,12 @@ export default function Vozila() {
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deletingVozilo) {
-      const updatedVozila = vozilaData.filter((v) => v.id !== deletingVozilo.id);
-      setVozilaData(updatedVozila);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedVozila));
+      const result = await deleteVozilo(deletingVozilo.$id);
+      if (result.success) {
+        await loadVozila();
+      }
     }
     setIsDeleteDialogOpen(false);
     setDeletingVozilo(null);

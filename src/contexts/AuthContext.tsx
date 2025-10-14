@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { hashPassword, verifyPassword, sanitizeInput, loginRateLimiter, validatePasswordStrength } from '@/lib/security';
+import { loginUser, changeUserPassword, registerUser, getAllUsers, deleteUser as deleteUserService } from '@/services/authService';
+import { validatePasswordStrength, loginRateLimiter } from '@/lib/security';
 
 interface User {
+  id: string;
   username: string;
   email: string;
+  role: string;
 }
 
 interface AuthContextType {
@@ -12,47 +15,12 @@ interface AuthContextType {
   logout: () => void;
   changePassword: (oldPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   addUser: (username: string, password: string, email: string) => Promise<{ success: boolean; error?: string }>;
+  deleteUser: (userId: string) => Promise<{ success: boolean; error?: string }>;
+  getAllUsers: () => Promise<{ success: boolean; users?: any[]; error?: string }>;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// Korisnici se čuvaju u localStorage (besplatno, bez servera)
-const USERS_KEY = 'markovickop_users';
-
-// Default korisnici sa plain text lozinkama (automatski će se konvertovati u hash pri prvom login-u)
-const DEFAULT_USERS = [
-  { username: 'aca', password: 'aca123', email: 'aca@markovickop.rs' },
-  { username: 'dejan', password: 'dejan123', email: 'dejan@markovickop.rs' },
-  { username: 'laki', password: 'laki123', email: 'laki@markovickop.rs' },
-  { username: 'uros', password: 'uros123', email: 'uros@markovickop.rs' },
-  { username: 'jovana', password: 'jovana123', email: 'jovana@markovickop.rs' },
-];
-
-function getUsers() {
-  const stored = localStorage.getItem(USERS_KEY);
-  if (stored) {
-    try {
-      const users = JSON.parse(stored);
-      // Ako je prazan niz ili nema korisnika, vrati default
-      if (!users || users.length === 0) {
-        localStorage.setItem(USERS_KEY, JSON.stringify(DEFAULT_USERS));
-        return DEFAULT_USERS;
-      }
-      return users;
-    } catch {
-      localStorage.removeItem(USERS_KEY);
-      localStorage.setItem(USERS_KEY, JSON.stringify(DEFAULT_USERS));
-      return DEFAULT_USERS;
-    }
-  }
-  // Prvo pokretanje - postavi default korisnike
-  localStorage.setItem(USERS_KEY, JSON.stringify(DEFAULT_USERS));
-  return DEFAULT_USERS;
-}
-function saveUsers(users: any[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -72,9 +40,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    // Sanitize inputs (but keep basic alphanumeric + common chars)
     const cleanUsername = username.trim();
-    const cleanPassword = password; // Don't sanitize password - users may use special chars
+    const cleanPassword = password.trim();
     
     // Rate limiting check
     if (!loginRateLimiter.checkLimit(cleanUsername)) {
@@ -85,40 +52,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
     }
     
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const users = getUsers();
-    const foundUser = users.find(u => u.username === cleanUsername);
+    // Call Appwrite login service
+    const result = await loginUser(cleanUsername, cleanPassword);
     
-    if (!foundUser) {
-      return { success: false, error: "Pogrešno korisničko ime ili lozinka" };
-    }
-    
-    // Verify password (check if hashed or plain)
-    let isValid = false;
-    if (foundUser.password.length === 64 && /^[a-f0-9]{64}$/i.test(foundUser.password)) { 
-      // Hashed password (SHA-256 produces 64 hex characters)
-      isValid = await verifyPassword(cleanPassword, foundUser.password);
-    } else { 
-      // Legacy plain password
-      isValid = foundUser.password === cleanPassword;
-      // Upgrade to hashed password
-      if (isValid) {
-        const usersCopy = [...users];
-        const userIndex = usersCopy.findIndex(u => u.username === cleanUsername);
-        usersCopy[userIndex].password = await hashPassword(cleanPassword);
-        saveUsers(usersCopy);
-      }
-    }
-    
-    if (isValid) {
-      const userData = { username: foundUser.username, email: foundUser.email };
+    if (result.success && result.user) {
+      const userData: User = {
+        id: result.user.id,
+        username: result.user.username,
+        email: result.user.email,
+        role: result.user.role,
+      };
       setUser(userData);
       localStorage.setItem('markovickop_user', JSON.stringify(userData));
-      loginRateLimiter.reset(cleanUsername); // Reset on successful login
+      loginRateLimiter.reset(cleanUsername);
       return { success: true };
     }
     
-    return { success: false, error: "Pogrešno korisničko ime ili lozinka" };
+    return { success: false, error: result.error || 'Login failed' };
   };
 
   const logout = () => {
@@ -135,36 +85,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return { success: false, error: validation.errors[0] };
     }
     
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const users = getUsers();
-    const userIndex = users.findIndex(u => u.username === user.username);
-    
-    if (userIndex === -1) {
-      return { success: false, error: "Korisnik nije pronađen" };
-    }
-    
-    // Verify old password
-    let isValid = false;
-    if (users[userIndex].password.length === 64) {
-      isValid = await verifyPassword(oldPassword, users[userIndex].password);
-    } else {
-      isValid = users[userIndex].password === oldPassword;
-    }
-    
-    if (!isValid) {
-      return { success: false, error: "Stara lozinka nije ispravna" };
-    }
-    
-    // Hash and save new password
-    users[userIndex].password = await hashPassword(newPassword);
-    saveUsers(users);
-    return { success: true };
+    // Call Appwrite change password service
+    const result = await changeUserPassword(user.id, oldPassword, newPassword);
+    return result;
   };
 
   const addUser = async (username: string, password: string, email: string): Promise<{ success: boolean; error?: string }> => {
-    // Sanitize inputs
-    const cleanUsername = sanitizeInput(username);
-    const cleanEmail = sanitizeInput(email);
+    const cleanUsername = username.trim();
+    const cleanEmail = email.trim();
     
     // Validate password strength
     const validation = validatePasswordStrength(password);
@@ -172,26 +100,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return { success: false, error: validation.errors[0] };
     }
     
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const users = getUsers();
-    
-    if (users.some(u => u.username === cleanUsername)) {
-      return { success: false, error: "Korisničko ime već postoji" };
-    }
-    
-    if (users.some(u => u.email === cleanEmail)) {
-      return { success: false, error: "Email već postoji" };
-    }
-    
-    // Hash password before storing
-    const hashedPassword = await hashPassword(password);
-    users.push({ username: cleanUsername, password: hashedPassword, email: cleanEmail });
-    saveUsers(users);
-    return { success: true };
+    // Call Appwrite register service
+    const result = await registerUser(cleanUsername, cleanEmail, password);
+    return result;
+  };
+
+  const deleteUser = async (userId: string): Promise<{ success: boolean; error?: string }> => {
+    const result = await deleteUserService(userId);
+    return result;
+  };
+
+  const getAllUsersFunc = async (): Promise<{ success: boolean; users?: any[]; error?: string }> => {
+    const result = await getAllUsers();
+    return result;
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, changePassword, addUser, isLoading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      logout, 
+      changePassword, 
+      addUser, 
+      deleteUser,
+      getAllUsers: getAllUsersFunc,
+      isLoading 
+    }}>
       {children}
     </AuthContext.Provider>
   );

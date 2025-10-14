@@ -15,7 +15,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import finansijeDataJson from "@/data/finansije.json";
 import { FinansijeForm, FinansijeData } from "@/components/FinansijeForm";
 import { FinansijeChart } from "@/components/FinansijeChart";
 import React, { useState, useEffect, useMemo } from "react";
@@ -41,15 +40,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/contexts/AuthContext";
+import { getFinansije, createFinansija, updateFinansija, deleteFinansija } from "@/services/finansijeService";
 
 export default function Finansije() {
-  const STORAGE_KEY = "markovickop_finansije";
+  const { user } = useAuth();
   const [finansijeData, setFinansijeData] = useState<any[]>([]);
   const [deletingFinansija, setDeletingFinansija] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingFinansija, setEditingFinansija] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,25 +60,38 @@ export default function Finansije() {
   const [sortBy, setSortBy] = useState<string>("datum-desc");
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setFinansijeData(JSON.parse(stored));
-        return;
-      } catch {}
+    if (user) {
+      loadFinansije();
     }
-    setFinansijeData(finansijeDataJson);
-  }, []);
+  }, [user]);
 
-  const handleSave = (data: FinansijeData) => {
-    // Dodajemo tip i id (možeš proširiti formu po potrebi)
+  const loadFinansije = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    const result = await getFinansije(user.id);
+    if (result.success && result.finansije) {
+      setFinansijeData(result.finansije);
+    }
+    setIsLoading(false);
+  };
+
+  const handleSave = async (data: FinansijeData) => {
+    if (!user) return;
+    
     const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
-    const id = Date.now();
-    const novaTransakcija = { ...data, tip, id };
-    const noveFinansije = [novaTransakcija, ...finansijeData];
-    setFinansijeData(noveFinansije);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(noveFinansije));
-    setIsAddDialogOpen(false);
+    const result = await createFinansija(user.id, {
+      datum: data.datum,
+      tip: tip as 'prihod' | 'rashod',
+      kategorija: data.kategorija,
+      iznos: data.iznos,
+      opis: data.opis,
+    } as any);
+    
+    if (result.success) {
+      await loadFinansije();
+      setIsAddDialogOpen(false);
+    }
   };
 
   const handleEdit = (finansija: any) => {
@@ -84,15 +99,20 @@ export default function Finansije() {
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdate = (data: FinansijeData) => {
-    if (editingFinansija) {
-      const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
-      const updatedFinansija = { ...data, tip, id: editingFinansija.id };
-      const updatedFinansije = finansijeData.map((f) =>
-        f.id === editingFinansija.id ? updatedFinansija : f
-      );
-      setFinansijeData(updatedFinansije);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedFinansije));
+  const handleUpdate = async (data: FinansijeData) => {
+    if (!editingFinansija) return;
+    
+    const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
+    const result = await updateFinansija(editingFinansija.$id, {
+      datum: data.datum,
+      tip: tip as 'prihod' | 'rashod',
+      kategorija: data.kategorija,
+      iznos: data.iznos,
+      opis: data.opis,
+    } as any);
+    
+    if (result.success) {
+      await loadFinansije();
       setIsEditDialogOpen(false);
       setEditingFinansija(null);
     }
@@ -103,11 +123,12 @@ export default function Finansije() {
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deletingFinansija) {
-      const updatedFinansije = finansijeData.filter((f) => f.id !== deletingFinansija.id);
-      setFinansijeData(updatedFinansije);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedFinansije));
+      const result = await deleteFinansija(deletingFinansija.$id);
+      if (result.success) {
+        await loadFinansije();
+      }
     }
     setIsDeleteDialogOpen(false);
     setDeletingFinansija(null);
