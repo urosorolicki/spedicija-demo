@@ -8,25 +8,98 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import finansijeData from "@/data/finansije.json";
-import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import finansijeDataJson from "@/data/finansije.json";
+import { FinansijeForm, FinansijeData } from "@/components/FinansijeForm";
+import React, { useState, useEffect } from "react";
+import { DollarSign, TrendingUp, TrendingDown, Download } from "lucide-react";
 import { motion } from "framer-motion";
+import { exportToJSON, exportToCSV, exportToPDF } from "@/lib/export";
 
 export default function Finansije() {
+  const STORAGE_KEY = "markovickop_finansije";
+  const [finansijeData, setFinansijeData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setFinansijeData(JSON.parse(stored));
+        return;
+      } catch {}
+    }
+    setFinansijeData(finansijeDataJson);
+  }, []);
+
+  const handleSave = (data: FinansijeData) => {
+    // Dodajemo tip i id (možeš proširiti formu po potrebi)
+    const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
+    const id = Date.now();
+    const novaTransakcija = { ...data, tip, id };
+    const noveFinansije = [novaTransakcija, ...finansijeData];
+    setFinansijeData(noveFinansije);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(noveFinansije));
+  };
+
   const ukupniPrihodi = finansijeData
     .filter((f) => f.tip === "prihod")
-    .reduce((sum, f) => sum + f.iznos, 0);
+    .reduce((sum, f) => sum + Number(f.iznos), 0);
 
   const ukupniRashodi = finansijeData
     .filter((f) => f.tip === "rashod")
-    .reduce((sum, f) => sum + f.iznos, 0);
+    .reduce((sum, f) => sum + Number(f.iznos), 0);
+
+  const handleExport = (format: "json" | "csv" | "pdf") => {
+    const timestamp = new Date().toISOString().split("T")[0];
+    const filename = `finansije_${timestamp}`;
+    
+    switch (format) {
+      case "json":
+        exportToJSON(finansijeData, filename);
+        break;
+      case "csv":
+        exportToCSV(finansijeData, filename);
+        break;
+      case "pdf":
+        exportToPDF(finansijeData, filename, "Finansije");
+        break;
+    }
+  };
 
   return (
     <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Finansije</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">Prihodi i rashodi</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Finansije</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Prihodi i rashodi</p>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-2">
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => handleExport("json")}>
+              Preuzmi JSON
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleExport("csv")}>
+              Preuzmi CSV
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleExport("pdf")}>
+              Preuzmi PDF
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
+      <FinansijeForm onSave={handleSave} />
 
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>

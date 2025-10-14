@@ -10,18 +10,34 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   changePassword: (oldPassword: string, newPassword: string) => Promise<boolean>;
+  addUser: (username: string, password: string, email: string) => Promise<boolean>;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Hardkodovani korisnici za demo (u produkciji bi ovo bilo u bazi)
-const DEMO_USERS = [
-  { username: 'admin', password: 'markovickop2025', email: 'admin@markovickop.rs' },
-  { username: 'marko', password: 'vozila123', email: 'marko@markovickop.rs' },
-  { username: 'test', password: 'test123', email: 'test@markovickop.rs' },
-  { username: 'uros', password: 'uros123', email: 'uros@markovickop.rs' },
-];
+// Korisnici se čuvaju u localStorage (besplatno, bez servera)
+const USERS_KEY = 'markovickop_users';
+function getUsers() {
+  const stored = localStorage.getItem(USERS_KEY);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch {
+      localStorage.removeItem(USERS_KEY);
+    }
+  }
+  // Default korisnici
+  return [
+    { username: 'aca', password: 'aca123', email: 'aca@markovickop.rs' },
+    { username: 'dejan', password: 'dejan123', email: 'dejan@markovickop.rs' },
+    { username: 'laki', password: 'laki123', email: 'laki@markovickop.rs' },
+    { username: 'uros', password: 'uros123', email: 'uros@markovickop.rs' },
+  ];
+}
+function saveUsers(users: any[]) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -41,20 +57,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    // Simuliramo API poziv
     await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const foundUser = DEMO_USERS.find(
+    const users = getUsers();
+    const foundUser = users.find(
       u => u.username === username && u.password === password
     );
-
     if (foundUser) {
       const userData = { username: foundUser.username, email: foundUser.email };
       setUser(userData);
       localStorage.setItem('markovickop_user', JSON.stringify(userData));
       return true;
     }
-    
     return false;
   };
 
@@ -65,27 +78,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const changePassword = async (oldPassword: string, newPassword: string): Promise<boolean> => {
     if (!user) return false;
-    
-    // Simuliramo API poziv
     await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Proveravamo da li je stara lozinka ispravna
-    const foundUser = DEMO_USERS.find(u => u.username === user.username);
-    if (!foundUser || foundUser.password !== oldPassword) {
+    const users = getUsers();
+    const userIndex = users.findIndex(u => u.username === user.username);
+    if (userIndex === -1 || users[userIndex].password !== oldPassword) {
       return false;
     }
-    
-    // Ažuriramo lozinku u DEMO_USERS (u produkciji bi ovo bilo u bazi)
-    const userIndex = DEMO_USERS.findIndex(u => u.username === user.username);
-    if (userIndex !== -1) {
-      DEMO_USERS[userIndex].password = newPassword;
+    users[userIndex].password = newPassword;
+    saveUsers(users);
+    return true;
+  };
+
+  const addUser = async (username: string, password: string, email: string): Promise<boolean> => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const users = getUsers();
+    if (users.some(u => u.username === username || u.email === email)) {
+      return false; // korisnik već postoji
     }
-    
+    users.push({ username, password, email });
+    saveUsers(users);
     return true;
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, changePassword, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, changePassword, addUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

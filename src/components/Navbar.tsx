@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -45,12 +46,13 @@ export const Navbar = ({ onMenuClick }: NavbarProps) => {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 md:h-10 md:w-10 rounded-full">
-                <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-accent flex items-center justify-center">
-                  <span className="text-xs md:text-sm font-semibold text-accent-foreground">
+              <Button variant="ghost" className="relative h-8 w-8 md:h-10 md:w-10 rounded-full p-0">
+                <Avatar className="h-8 w-8 md:h-10 md:w-10">
+                  {/* Ako imaš sliku korisnika, dodaj <AvatarImage src={user?.imageUrl} alt={user?.username} /> ovde */}
+                  <AvatarFallback className="bg-accent text-xs md:text-sm font-semibold text-accent-foreground">
                     {user?.username?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+                  </AvatarFallback>
+                </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>

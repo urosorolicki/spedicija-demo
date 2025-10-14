@@ -238,12 +238,12 @@ export const VehicleProfitability = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xs sm:text-sm">Vozilo</TableHead>
-                    <TableHead className="text-xs sm:text-sm">Status</TableHead>
+                    <TableHead className="hidden sm:table-cell text-xs sm:text-sm">Status</TableHead>
                     <TableHead className="text-right text-xs sm:text-sm">Prihodi</TableHead>
-                    <TableHead className="text-right text-xs sm:text-sm">Rashodi</TableHead>
+                    <TableHead className="hidden md:table-cell text-right text-xs sm:text-sm">Rashodi</TableHead>
                     <TableHead className="text-right text-xs sm:text-sm">Profit</TableHead>
-                    <TableHead className="text-right text-xs sm:text-sm">Marža</TableHead>
-                    <TableHead className="text-center text-xs sm:text-sm">Ocena</TableHead>
+                    <TableHead className="hidden lg:table-cell text-right text-xs sm:text-sm">Marža</TableHead>
+                    <TableHead className="hidden sm:table-cell text-center text-xs sm:text-sm">Ocena</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -279,7 +279,7 @@ export const VehicleProfitability = () => {
                         className="hover:bg-muted/50"
                       >
                         <TableCell className="font-medium text-xs sm:text-sm">{stat.naziv}</TableCell>
-                        <TableCell>
+                        <TableCell className="hidden sm:table-cell">
                           <Badge variant={stat.status === "aktivan" ? "default" : "secondary"} className="text-xs">
                             {stat.status}
                           </Badge>
@@ -287,7 +287,7 @@ export const VehicleProfitability = () => {
                         <TableCell className="text-right text-success font-medium text-xs sm:text-sm">
                           {formatCurrency(stat.prihodi)}
                         </TableCell>
-                        <TableCell className="text-right text-destructive font-medium text-xs sm:text-sm">
+                        <TableCell className="hidden md:table-cell text-right text-destructive font-medium text-xs sm:text-sm">
                           {formatCurrency(stat.rashodi)}
                         </TableCell>
                         <TableCell className={cn(
@@ -296,7 +296,7 @@ export const VehicleProfitability = () => {
                         )}>
                           {formatCurrency(stat.profit)}
                         </TableCell>
-                        <TableCell className="text-right text-xs sm:text-sm">
+                        <TableCell className="hidden lg:table-cell text-right text-xs sm:text-sm">
                           <span className={cn(
                             "font-medium",
                             isHighMargin ? "text-success" : isLowMargin ? "text-warning" : ""
@@ -304,7 +304,7 @@ export const VehicleProfitability = () => {
                             {stat.marza.toFixed(1)}%
                           </span>
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="hidden sm:table-cell text-center">
                           <Badge variant={ocenaColor as any} className="text-xs">{ocena}</Badge>
                         </TableCell>
                       </motion.tr>

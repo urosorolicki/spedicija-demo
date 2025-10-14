@@ -8,25 +8,98 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import materijalData from "@/data/materijal.json";
-import { Package, ArrowUp, ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import materijalDataJson from "@/data/materijal.json";
+import { MaterijalForm, MaterijalData } from "@/components/MaterijalForm";
+import React, { useState, useEffect } from "react";
+import { Package, ArrowUp, ArrowDown, Download } from "lucide-react";
+import { exportToJSON, exportToCSV, exportToPDF } from "@/lib/export";
 
 export default function Materijal() {
+  const STORAGE_KEY = "markovickop_materijal";
+  const [materijalData, setMaterijalData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setMaterijalData(JSON.parse(stored));
+        return;
+      } catch {}
+    }
+    setMaterijalData(materijalDataJson);
+  }, []);
+
+  const handleSave = (data: MaterijalData) => {
+    const id = Date.now();
+    const noviMaterijal = {
+      ...data,
+      id,
+    };
+    const noviUnosi = [noviMaterijal, ...materijalData];
+    setMaterijalData(noviUnosi);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(noviUnosi));
+  };
+
   const ukupanDovoz = materijalData
     .filter((m) => m.smer === "dovoz")
-    .reduce((sum, m) => sum + m.kolicina, 0);
+    .reduce((sum, m) => sum + Number(m.kolicina), 0);
 
   const ukupanOdvoz = materijalData
     .filter((m) => m.smer === "odvoz")
-    .reduce((sum, m) => sum + m.kolicina, 0);
+    .reduce((sum, m) => sum + Number(m.kolicina), 0);
+
+  const handleExport = (format: "json" | "csv" | "pdf") => {
+    const timestamp = new Date().toISOString().split("T")[0];
+    const filename = `materijal_${timestamp}`;
+    
+    switch (format) {
+      case "json":
+        exportToJSON(materijalData, filename);
+        break;
+      case "csv":
+        exportToCSV(materijalData, filename);
+        break;
+      case "pdf":
+        exportToPDF(materijalData, filename, "Materijal");
+        break;
+    }
+  };
 
   return (
     <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Evidencija materijala</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">Pregled dovoza i odvoza materijala</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Evidencija materijala</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Pregled dovoza i odvoza materijala</p>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-2">
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => handleExport("json")}>
+              Preuzmi JSON
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleExport("csv")}>
+              Preuzmi CSV
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleExport("pdf")}>
+              Preuzmi PDF
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-
+      <MaterijalForm onSave={handleSave} />
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="shadow-card border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -37,7 +110,6 @@ export default function Materijal() {
             <div className="text-lg sm:text-2xl font-bold text-primary">{ukupanDovoz} m³</div>
           </CardContent>
         </Card>
-
         <Card className="shadow-card border-accent/20">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs sm:text-sm font-medium">Ukupan odvoz</CardTitle>
@@ -47,7 +119,6 @@ export default function Materijal() {
             <div className="text-lg sm:text-2xl font-bold text-accent">{ukupanOdvoz} m³</div>
           </CardContent>
         </Card>
-
         <Card className="shadow-card">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs sm:text-sm font-medium">Ukupno unosa</CardTitle>
@@ -60,7 +131,6 @@ export default function Materijal() {
           </CardContent>
         </Card>
       </div>
-
       <Card className="shadow-card">
         <CardHeader>
           <CardTitle className="text-lg">Svi unosi</CardTitle>
