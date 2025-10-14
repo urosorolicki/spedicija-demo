@@ -1,7 +1,8 @@
-import { Home, Truck, TrendingUp, Package, Settings } from "lucide-react";
+import { Home, Truck, TrendingUp, Package, Settings, Shield } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -9,15 +10,25 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-const menuItems = [
+const baseMenuItems = [
   { icon: Home, label: "Početna", path: "/" },
   { icon: Truck, label: "Vozila", path: "/vozila" },
   { icon: TrendingUp, label: "Finansije", path: "/finansije" },
   { icon: Package, label: "Materijal", path: "/materijal" },
-  { icon: Settings, label: "Podešavanja", path: "/podesavanja" },
 ];
 
+const adminMenuItem = { icon: Shield, label: "Admin Panel", path: "/admin" };
+const settingsMenuItem = { icon: Settings, label: "Podešavanja", path: "/podesavanja" };
+
 export const DashboardSidebar = ({ isOpen, isMobile, onClose }: SidebarProps) => {
+  const { user } = useAuth();
+  
+  // Dodaj Admin Panel samo za korisnika "uros"
+  const menuItems = [
+    ...baseMenuItems,
+    ...(user?.username === "uros" ? [adminMenuItem] : []),
+    settingsMenuItem,
+  ];
   return (
     <motion.aside
       initial={false}

@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface FinansijeFormProps {
   onSave: (data: FinansijeData) => void;
+  initialData?: any;
 }
 
 export interface FinansijeData {
@@ -21,15 +22,15 @@ export interface FinansijeData {
 const tipovi = ["prihod", "rashod"];
 const kategorije = ["Prevoz", "Gorivo", "Održavanje", "Investicija"];
 
-export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave }) => {
+export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState<FinansijeData>({
-    datum: "",
-    tip: tipovi[0],
-    kategorija: kategorije[0],
-    iznos: 0,
-    opis: "",
-    vozilo: "",
+    datum: initialData?.datum || "",
+    tip: initialData?.tip || tipovi[0],
+    kategorija: initialData?.kategorija || kategorije[0],
+    iznos: initialData?.iznos || 0,
+    opis: initialData?.opis || "",
+    vozilo: initialData?.vozilo || "",
   });
   const [error, setError] = useState<string>("");
 

@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface MaterijalFormProps {
   onSave: (data: MaterijalData) => void;
+  initialData?: any;
 }
 
 export interface MaterijalData {
@@ -24,17 +25,17 @@ const jedinice = ["kg", "t", "l", "m³"];
 const tipovi = ["Šljunak", "Pesak", "Kamen", "Agregat"];
 const smerovi = ["dovoz", "odvoz"];
 
-export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave }) => {
+export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState<MaterijalData>({
-    datum: "",
-    tip: tipovi[0],
-    kolicina: 0,
-    jedinica: jedinice[0],
-    lokacija: "",
-    vozac: "",
-    vozilo: "",
-    smer: smerovi[0],
+    datum: initialData?.datum || "",
+    tip: initialData?.tip || tipovi[0],
+    kolicina: initialData?.kolicina || 0,
+    jedinica: initialData?.jedinica || jedinice[0],
+    lokacija: initialData?.lokacija || "",
+    vozac: initialData?.vozac || "",
+    vozilo: initialData?.vozilo || "",
+    smer: initialData?.smer || smerovi[0],
   });
   const [error, setError] = useState<string>("");
 

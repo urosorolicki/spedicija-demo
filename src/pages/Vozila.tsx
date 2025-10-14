@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import vozilaDataJson from "@/data/vozila.json";
 import { VozilaForm, VoziloData } from "@/components/VozilaForm";
+import { VehicleNotifications } from "@/components/VehicleNotifications";
 import React, { useState, useEffect, useMemo } from "react";
 import { Truck, Calendar, Gauge, Settings, Pencil, Download, Trash2, Search, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -180,25 +181,28 @@ export default function Vozila() {
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Vozila</h1>
           <p className="text-sm sm:text-base text-muted-foreground">Pregled voznog parka i analize profitabilnosti</p>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => handleExport("json")}>
-              Preuzmi JSON
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleExport("csv")}>
-              Preuzmi CSV
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleExport("pdf")}>
-              Preuzmi PDF
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2">
+          <VehicleNotifications vozila={vozilaData} />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Download className="h-4 w-4" />
+                Export
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport("json")}>
+                Preuzmi JSON
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("csv")}>
+                Preuzmi CSV
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                Preuzmi PDF
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* Search and Filter Section */}

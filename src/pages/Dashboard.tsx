@@ -1,6 +1,7 @@
 import { DollarSign, TrendingDown, Wallet, Truck } from "lucide-react";
 import { MetricCard } from "@/components/MetricCard";
 import { DashboardChart } from "@/components/DashboardChart";
+import { VehicleNotifications } from "@/components/VehicleNotifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LineChart,
@@ -16,7 +17,7 @@ import {
 } from "recharts";
 import finansijeData from "@/data/finansije.json";
 import materijalData from "@/data/materijal.json";
-import vozilaData from "@/data/vozila.json";
+import vozilaDataJson from "@/data/vozila.json";
 import mesecniData from "@/data/mesecniPodaci.json";
 import {
   Table,
@@ -27,8 +28,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
+  const [vozilaData, setVozilaData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("markovickop_vozila");
+    if (stored) {
+      try {
+        setVozilaData(JSON.parse(stored));
+        return;
+      } catch {}
+    }
+    setVozilaData(vozilaDataJson);
+  }, []);
   const ukupniPrihodi = finansijeData
     .filter((f) => f.tip === "prihod")
     .reduce((sum, f) => sum + f.iznos, 0);
@@ -59,9 +73,12 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Dashboard</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">Pregled ključnih metrika i aktivnosti</p>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Pregled ključnih metrika i aktivnosti</p>
+        </div>
+        <VehicleNotifications vozila={vozilaData} />
       </div>
 
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">

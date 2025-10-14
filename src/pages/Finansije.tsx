@@ -19,7 +19,7 @@ import finansijeDataJson from "@/data/finansije.json";
 import { FinansijeForm, FinansijeData } from "@/components/FinansijeForm";
 import { FinansijeChart } from "@/components/FinansijeChart";
 import React, { useState, useEffect, useMemo } from "react";
-import { DollarSign, TrendingUp, TrendingDown, Download, Trash2, Search, Plus } from "lucide-react";
+import { DollarSign, TrendingUp, TrendingDown, Download, Trash2, Search, Plus, Edit } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -48,6 +48,8 @@ export default function Finansije() {
   const [deletingFinansija, setDeletingFinansija] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingFinansija, setEditingFinansija] = useState<any | null>(null);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -75,6 +77,25 @@ export default function Finansije() {
     setFinansijeData(noveFinansije);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(noveFinansije));
     setIsAddDialogOpen(false);
+  };
+
+  const handleEdit = (finansija: any) => {
+    setEditingFinansija(finansija);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdate = (data: FinansijeData) => {
+    if (editingFinansija) {
+      const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
+      const updatedFinansija = { ...data, tip, id: editingFinansija.id };
+      const updatedFinansije = finansijeData.map((f) =>
+        f.id === editingFinansija.id ? updatedFinansija : f
+      );
+      setFinansijeData(updatedFinansije);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedFinansije));
+      setIsEditDialogOpen(false);
+      setEditingFinansija(null);
+    }
   };
 
   const handleDelete = (finansija: any) => {
@@ -366,7 +387,7 @@ export default function Finansije() {
                   <TableHead className="hidden md:table-cell text-xs sm:text-sm">Opis</TableHead>
                   <TableHead className="hidden md:table-cell text-xs sm:text-sm">Vozilo</TableHead>
                   <TableHead className="text-right text-xs sm:text-sm">Iznos</TableHead>
-                  <TableHead className="text-xs sm:text-sm w-[50px]"></TableHead>
+                  <TableHead className="text-xs sm:text-sm w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -395,14 +416,24 @@ export default function Finansije() {
                       {transakcija.iznos.toLocaleString("sr-RS")} RSD
                     </TableCell>
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDelete(transakcija)}
-                        className="h-7 w-7 p-0 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEdit(transakcija)}
+                          className="h-7 w-7 p-0 text-primary hover:text-primary"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleDelete(transakcija)}
+                          className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -441,6 +472,19 @@ export default function Finansije() {
             </DialogDescription>
           </DialogHeader>
           <FinansijeForm onSave={handleSave} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Izmeni transakciju</DialogTitle>
+            <DialogDescription>
+              Ažurirajte detalje o transakciji
+            </DialogDescription>
+          </DialogHeader>
+          <FinansijeForm onSave={handleUpdate} initialData={editingFinansija} />
         </DialogContent>
       </Dialog>
     </div>

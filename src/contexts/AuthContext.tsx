@@ -19,22 +19,36 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Korisnici se čuvaju u localStorage (besplatno, bez servera)
 const USERS_KEY = 'markovickop_users';
+
+// Default korisnici sa plain text lozinkama (automatski će se konvertovati u hash pri prvom login-u)
+const DEFAULT_USERS = [
+  { username: 'aca', password: 'aca123', email: 'aca@markovickop.rs' },
+  { username: 'dejan', password: 'dejan123', email: 'dejan@markovickop.rs' },
+  { username: 'laki', password: 'laki123', email: 'laki@markovickop.rs' },
+  { username: 'uros', password: 'uros123', email: 'uros@markovickop.rs' },
+  { username: 'jovana', password: 'jovana123', email: 'jovana@markovickop.rs' },
+];
+
 function getUsers() {
   const stored = localStorage.getItem(USERS_KEY);
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const users = JSON.parse(stored);
+      // Ako je prazan niz ili nema korisnika, vrati default
+      if (!users || users.length === 0) {
+        localStorage.setItem(USERS_KEY, JSON.stringify(DEFAULT_USERS));
+        return DEFAULT_USERS;
+      }
+      return users;
     } catch {
       localStorage.removeItem(USERS_KEY);
+      localStorage.setItem(USERS_KEY, JSON.stringify(DEFAULT_USERS));
+      return DEFAULT_USERS;
     }
   }
-  // Default korisnici
-  return [
-    { username: 'aca', password: 'aca123', email: 'aca@markovickop.rs' },
-    { username: 'dejan', password: 'dejan123', email: 'dejan@markovickop.rs' },
-    { username: 'laki', password: 'laki123', email: 'laki@markovickop.rs' },
-    { username: 'uros', password: 'uros123', email: 'uros@markovickop.rs' },
-  ];
+  // Prvo pokretanje - postavi default korisnike
+  localStorage.setItem(USERS_KEY, JSON.stringify(DEFAULT_USERS));
+  return DEFAULT_USERS;
 }
 function saveUsers(users: any[]) {
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
@@ -58,9 +72,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    // Sanitize inputs
-    const cleanUsername = sanitizeInput(username);
-    const cleanPassword = sanitizeInput(password);
+    // Sanitize inputs (but keep basic alphanumeric + common chars)
+    const cleanUsername = username.trim();
+    const cleanPassword = password; // Don't sanitize password - users may use special chars
     
     // Rate limiting check
     if (!loginRateLimiter.checkLimit(cleanUsername)) {
@@ -81,14 +95,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     // Verify password (check if hashed or plain)
     let isValid = false;
-    if (foundUser.password.length === 64) { // Hashed password
+    if (foundUser.password.length === 64 && /^[a-f0-9]{64}$/i.test(foundUser.password)) { 
+      // Hashed password (SHA-256 produces 64 hex characters)
       isValid = await verifyPassword(cleanPassword, foundUser.password);
-    } else { // Legacy plain password
+    } else { 
+      // Legacy plain password
       isValid = foundUser.password === cleanPassword;
       // Upgrade to hashed password
       if (isValid) {
-        foundUser.password = await hashPassword(cleanPassword);
-        saveUsers(users);
+        const usersCopy = [...users];
+        const userIndex = usersCopy.findIndex(u => u.username === cleanUsername);
+        usersCopy[userIndex].password = await hashPassword(cleanPassword);
+        saveUsers(usersCopy);
       }
     }
     

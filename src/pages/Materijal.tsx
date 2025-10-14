@@ -19,7 +19,7 @@ import materijalDataJson from "@/data/materijal.json";
 import { MaterijalForm, MaterijalData } from "@/components/MaterijalForm";
 import { MaterijalChart } from "@/components/MaterijalChart";
 import React, { useState, useEffect, useMemo } from "react";
-import { Package, ArrowUp, ArrowDown, Download, Trash2, Search, Plus } from "lucide-react";
+import { Package, ArrowUp, ArrowDown, Download, Trash2, Search, Plus, Edit } from "lucide-react";
 import { exportToJSON, exportToCSV, exportToPDF } from "@/lib/export";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -48,6 +48,8 @@ export default function Materijal() {
   const [deletingMaterijal, setDeletingMaterijal] = useState<any | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingMaterijal, setEditingMaterijal] = useState<any | null>(null);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,6 +78,24 @@ export default function Materijal() {
     setMaterijalData(noviUnosi);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(noviUnosi));
     setIsAddDialogOpen(false);
+  };
+
+  const handleEdit = (materijal: any) => {
+    setEditingMaterijal(materijal);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdate = (data: MaterijalData) => {
+    if (editingMaterijal) {
+      const updatedMaterijal = { ...data, id: editingMaterijal.id };
+      const updatedData = materijalData.map((m) =>
+        m.id === editingMaterijal.id ? updatedMaterijal : m
+      );
+      setMaterijalData(updatedData);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+      setIsEditDialogOpen(false);
+      setEditingMaterijal(null);
+    }
   };
 
   const handleDelete = (materijal: any) => {
@@ -326,7 +346,79 @@ export default function Materijal() {
           <CardTitle className="text-lg">Svi unosi</CardTitle>
         </CardHeader>
         <CardContent className="p-0 sm:p-6">
-          <div className="overflow-x-auto">
+          {/* Mobile View - Cards */}
+          <div className="block sm:hidden space-y-3 p-4">
+            {filteredData.map((unos) => (
+              <motion.div
+                key={unos.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-card border rounded-lg p-4 space-y-3 shadow-sm"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1 flex-1">
+                    <div className="font-semibold text-base">{unos.tip}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {new Date(unos.datum).toLocaleDateString("sr-RS")}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleEdit(unos)}
+                      className="h-8 w-8 p-0 text-primary hover:text-primary"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDelete(unos)}
+                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Badge variant={unos.smer === "dovoz" ? "default" : "secondary"}>
+                    {unos.smer === "dovoz" ? (
+                      <span className="flex items-center gap-1">
+                        <ArrowDown className="h-3 w-3" /> Dovoz
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1">
+                        <ArrowUp className="h-3 w-3" /> Odvoz
+                      </span>
+                    )}
+                  </Badge>
+                  <span className="text-lg font-bold">
+                    {unos.kolicina} {unos.jedinica}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t">
+                  <div>
+                    <div className="text-muted-foreground text-xs">Vozilo</div>
+                    <div className="font-medium">{unos.vozilo}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground text-xs">Vozač</div>
+                    <div className="font-medium">{unos.vozac}</div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="text-muted-foreground text-xs">Lokacija</div>
+                    <div className="font-medium truncate">{unos.lokacija}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop View - Table */}
+          <div className="hidden sm:block overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -334,10 +426,10 @@ export default function Materijal() {
                   <TableHead className="text-xs sm:text-sm">Tip materijala</TableHead>
                   <TableHead className="text-xs sm:text-sm">Količina</TableHead>
                   <TableHead className="text-xs sm:text-sm">Smer</TableHead>
-                  <TableHead className="hidden sm:table-cell text-xs sm:text-sm">Vozilo</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Vozilo</TableHead>
                   <TableHead className="hidden md:table-cell text-xs sm:text-sm">Vozač</TableHead>
                   <TableHead className="hidden lg:table-cell text-xs sm:text-sm">Lokacija</TableHead>
-                  <TableHead className="text-xs sm:text-sm w-[50px]"></TableHead>
+                  <TableHead className="text-xs sm:text-sm w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -363,18 +455,28 @@ export default function Materijal() {
                         )}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{unos.vozilo}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{unos.vozilo}</TableCell>
                     <TableCell className="hidden md:table-cell text-xs sm:text-sm">{unos.vozac}</TableCell>
                     <TableCell className="hidden lg:table-cell max-w-xs truncate text-xs sm:text-sm">{unos.lokacija}</TableCell>
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDelete(unos)}
-                        className="h-7 w-7 p-0 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEdit(unos)}
+                          className="h-7 w-7 p-0 text-primary hover:text-primary"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleDelete(unos)}
+                          className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -413,6 +515,19 @@ export default function Materijal() {
             </DialogDescription>
           </DialogHeader>
           <MaterijalForm onSave={handleSave} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Izmeni unos materijala</DialogTitle>
+            <DialogDescription>
+              Ažurirajte detalje o dovozu ili odvozu materijala
+            </DialogDescription>
+          </DialogHeader>
+          <MaterijalForm onSave={handleUpdate} initialData={editingMaterijal} />
         </DialogContent>
       </Dialog>
     </div>

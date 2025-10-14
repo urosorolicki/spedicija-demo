@@ -28,6 +28,46 @@ export default function Podesavanja() {
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [profileError, setProfileError] = useState("");
+  const [profileSuccess, setProfileSuccess] = useState("");
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+  const handleProfileSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileError("");
+    setProfileSuccess("");
+    setIsSavingProfile(true);
+
+    try {
+      // Update user data in localStorage
+      const users = JSON.parse(localStorage.getItem("markovickop_users") || "[]");
+      const updatedUsers = users.map((u: any) => {
+        if (u.username === user?.username) {
+          return {
+            ...u,
+            email: profileData.email,
+            phone: profileData.telefon,
+          };
+        }
+        return u;
+      });
+      
+      localStorage.setItem("markovickop_users", JSON.stringify(updatedUsers));
+      
+      // Update current user in localStorage
+      const currentUser = updatedUsers.find((u: any) => u.username === user?.username);
+      if (currentUser) {
+        localStorage.setItem("markovickop_current_user", JSON.stringify(currentUser));
+      }
+      
+      setProfileSuccess("Profil je uspešno ažuriran!");
+      setTimeout(() => setProfileSuccess(""), 3000);
+    } catch (error) {
+      setProfileError("Došlo je do greške prilikom čuvanja profila");
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,9 +141,37 @@ export default function Podesavanja() {
                 className="text-sm" 
               />
             </div>
-            <Button className="bg-primary w-full sm:w-auto">
-              <Save className="h-4 w-4 mr-2" />
-              Sačuvaj izmene
+            {profileError && (
+              <Alert className="bg-red-900/50 border-red-700">
+                <AlertDescription className="text-red-200">
+                  {profileError}
+                </AlertDescription>
+              </Alert>
+            )}
+            {profileSuccess && (
+              <Alert className="bg-green-900/50 border-green-700">
+                <AlertDescription className="text-green-200 flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4" />
+                  {profileSuccess}
+                </AlertDescription>
+              </Alert>
+            )}
+            <Button 
+              onClick={handleProfileSave}
+              className="bg-primary w-full sm:w-auto"
+              disabled={isSavingProfile}
+            >
+              {isSavingProfile ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Čuvam...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Sačuvaj izmene
+                </>
+              )}
             </Button>
           </CardContent>
         </Card>
