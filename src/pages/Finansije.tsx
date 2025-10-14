@@ -79,10 +79,9 @@ export default function Finansije() {
   const handleSave = async (data: FinansijeData) => {
     if (!user) return;
     
-    const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
     const result = await createFinansija(user.id, {
       datum: data.datum,
-      tip: tip as 'prihod' | 'rashod',
+      tip: data.tip as 'prihod' | 'rashod',
       kategorija: data.kategorija,
       iznos: data.iznos,
       opis: data.opis,
@@ -102,10 +101,9 @@ export default function Finansije() {
   const handleUpdate = async (data: FinansijeData) => {
     if (!editingFinansija) return;
     
-    const tip = data.kategorija === "Prihod" ? "prihod" : "rashod";
     const result = await updateFinansija(editingFinansija.$id, {
       datum: data.datum,
-      tip: tip as 'prihod' | 'rashod',
+      tip: data.tip as 'prihod' | 'rashod',
       kategorija: data.kategorija,
       iznos: data.iznos,
       opis: data.opis,
