@@ -72,9 +72,13 @@ export default function Vozila() {
     if (!user) return;
     
     const result = await createVozilo(user.id, {
+      naziv: data.naziv,
       registracija: data.registracija,
       tipVozila: data.tip,
       nosivost: data.nosivost,
+      kilometraza: data.kilometraza,
+      godiste: data.godiste,
+      status: data.status,
       sledecaRevizijaGorivo: data.sledecaRevizijaGorivo,
       sledecaRegistracija: data.sledecaRegistracija,
     } as any);
@@ -94,9 +98,13 @@ export default function Vozila() {
     if (!editingVozilo) return;
     
     const result = await updateVozilo(editingVozilo.$id, {
+      naziv: data.naziv,
       registracija: data.registracija,
       tipVozila: data.tip,
       nosivost: data.nosivost,
+      kilometraza: data.kilometraza,
+      godiste: data.godiste,
+      status: data.status,
       sledecaRevizijaGorivo: data.sledecaRevizijaGorivo,
       sledecaRegistracija: data.sledecaRegistracija,
     } as any);
