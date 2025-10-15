@@ -22,4 +22,4 @@ export const COLLECTIONS = {
 };
 
 // Storage Bucket ID
-export const STORAGE_BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID || 'markovickop-images';
+export const STORAGE_BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID || '68efb145002481cb4fc6';
