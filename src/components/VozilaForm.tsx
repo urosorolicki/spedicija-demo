@@ -21,7 +21,6 @@ export interface VoziloData {
   godiste: number;
   status: string;
   sledecaRegistracija: string;
-  sledecaRevizijaGorivo: string;
   imageId?: string;
 }
 
@@ -40,7 +39,6 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
       godiste: new Date().getFullYear(),
       status: statusi[0],
       sledecaRegistracija: "",
-      sledecaRevizijaGorivo: "",
       imageId: undefined,
     }
   );
@@ -52,7 +50,7 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.naziv || !form.tip || !form.nosivost || !form.registracija || !form.kilometraza || !form.godiste || !form.status || !form.sledecaRegistracija || !form.sledecaRevizijaGorivo) {
+    if (!form.naziv || !form.tip || !form.nosivost || !form.registracija || !form.kilometraza || !form.godiste || !form.status || !form.sledecaRegistracija) {
       setError("Sva polja su obavezna.");
       return;
     }
@@ -73,7 +71,7 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
         godiste: new Date().getFullYear(),
         status: statusi[0],
         sledecaRegistracija: "",
-        sledecaRevizijaGorivo: "",
+        imageId: undefined,
       });
       setIsOpen(false);
     }
