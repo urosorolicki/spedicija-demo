@@ -27,16 +27,16 @@ export function DashboardChart({ finansijeData, materijalData, vozilaData }: Das
 
   // Material distribution
   const materijalChartData = useMemo(() => {
-    const dovoz = materijalData
-      .filter((m) => m.smer === "dovoz")
-      .reduce((sum, m) => sum + m.kolicina, 0);
-    const odvoz = materijalData
-      .filter((m) => m.smer === "odvoz")
-      .reduce((sum, m) => sum + m.kolicina, 0);
+    const ulaz = materijalData
+      .filter((m) => m.tip === "ulaz" && m.jedinica === "m³")
+      .reduce((sum, m) => sum + m.tezina, 0);
+    const izlaz = materijalData
+      .filter((m) => m.tip === "izlaz" && m.jedinica === "m³")
+      .reduce((sum, m) => sum + m.tezina, 0);
 
     return [
-      { name: "Dovoz", value: dovoz, color: "hsl(215 85% 55%)" },
-      { name: "Odvoz", value: odvoz, color: "hsl(25 95% 58%)" },
+      { name: "Ulaz", value: ulaz, color: "hsl(215 85% 55%)" },
+      { name: "Izlaz", value: izlaz, color: "hsl(25 95% 58%)" },
     ];
   }, [materijalData]);
 
@@ -120,7 +120,7 @@ export function DashboardChart({ finansijeData, materijalData, vozilaData }: Das
             <TrendingUp className="h-4 w-4 text-primary" />
             Distribucija materijala
           </CardTitle>
-          <CardDescription className="text-xs">Dovoz vs Odvoz</CardDescription>
+          <CardDescription className="text-xs">Ulaz vs Izlaz (m³)</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={200}>
