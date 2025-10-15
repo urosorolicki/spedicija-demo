@@ -8,6 +8,7 @@ export interface Finansija extends Models.Document {
   kategorija: string;
   iznos: number;
   opis?: string;
+  komentar?: string;
   vozilo?: string;
 }
 

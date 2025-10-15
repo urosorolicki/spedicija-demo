@@ -17,6 +17,7 @@ export interface FinansijeData {
   kategorija: string;
   iznos: number;
   opis: string;
+  komentar: string;
   vozilo: string;
 }
 
@@ -31,6 +32,7 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
     kategorija: initialData?.kategorija || kategorije[0],
     iznos: initialData?.iznos || 0,
     opis: initialData?.opis || "",
+    komentar: initialData?.komentar || "",
     vozilo: initialData?.vozilo || "",
   });
   const [error, setError] = useState<string>("");
@@ -56,6 +58,7 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
       kategorija: kategorije[0],
       iznos: 0,
       opis: "",
+      komentar: "",
       vozilo: "",
     });
     setIsOpen(false);
@@ -128,6 +131,10 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
               <div className="space-y-2">
                 <Label htmlFor="opis">Opis</Label>
                 <Input type="text" name="opis" id="opis" value={form.opis} onChange={handleChange} placeholder="Opis transakcije" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="komentar">Komentar</Label>
+                <Input type="text" name="komentar" id="komentar" value={form.komentar} onChange={handleChange} placeholder="Dodatni komentar" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="vozilo">Vozilo</Label>

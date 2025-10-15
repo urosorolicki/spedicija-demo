@@ -97,6 +97,7 @@ export default function Finansije() {
       kategorija: data.kategorija,
       iznos: data.iznos,
       opis: data.opis,
+      komentar: data.komentar,
       vozilo: data.vozilo,
     } as any);
     
@@ -120,6 +121,7 @@ export default function Finansije() {
       kategorija: data.kategorija,
       iznos: data.iznos,
       opis: data.opis,
+      komentar: data.komentar,
       vozilo: data.vozilo,
     } as any);
     
