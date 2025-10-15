@@ -1,4 +1,4 @@
-import { Client, Databases, Account } from 'appwrite';
+import { Client, Databases, Account, Storage } from 'appwrite';
 
 const client = new Client();
 
@@ -8,6 +8,7 @@ client
 
 export const account = new Account(client);
 export const databases = new Databases(client);
+export const storage = new Storage(client);
 
 export { client };
 
@@ -19,3 +20,6 @@ export const COLLECTIONS = {
   FINANSIJE: 'finansije',
   MATERIJAL: 'materijal',
 };
+
+// Storage Bucket ID
+export const STORAGE_BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID || 'markovickop-images';

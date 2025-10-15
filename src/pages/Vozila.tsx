@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getImageUrl } from "@/services/storageService";
 import { VozilaForm, VoziloData } from "@/components/VozilaForm";
 import { VehicleNotifications } from "@/components/VehicleNotifications";
 import React, { useState, useEffect, useMemo } from "react";
@@ -399,6 +400,17 @@ export default function Vozila() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-1.5 sm:space-y-2 md:space-y-3 pt-2 sm:pt-3">
+                {/* Slika vozila */}
+                {vozilo.imageId && (
+                  <div className="mb-3">
+                    <img
+                      src={getImageUrl(vozilo.imageId)}
+                      alt={vozilo.naziv}
+                      className="w-full h-32 sm:h-40 object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                
                 <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
                   <Truck className="h-3 w-3 sm:h-4 sm:w-4 text-primary flex-shrink-0" />
                   <span className="text-muted-foreground">Tip:</span>

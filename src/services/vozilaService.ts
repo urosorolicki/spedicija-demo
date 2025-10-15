@@ -13,6 +13,7 @@ export interface Vozilo extends Models.Document {
   sledecaRegistracija?: string;
   datumIstekaOsiguranja?: string;
   brojPoliseOsiguranja?: string;
+  imageId?: string; // Appwrite Storage file ID
 }
 
 /**

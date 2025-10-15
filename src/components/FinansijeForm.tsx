@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { ImageUpload } from "@/components/ImageUpload";
 
 interface FinansijeFormProps {
   onSave: (data: FinansijeData) => void;
@@ -19,6 +20,7 @@ export interface FinansijeData {
   opis: string;
   komentar?: string;
   vozilo: string;
+  imageId?: string;
 }
 
 const tipovi = ["prihod", "rashod"];
@@ -34,6 +36,7 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
     opis: initialData?.opis || "",
     komentar: initialData?.komentar || "",
     vozilo: initialData?.vozilo || "",
+    imageId: initialData?.imageId || undefined,
   });
   const [error, setError] = useState<string>("");
 
@@ -132,7 +135,7 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
                 <Label htmlFor="opis">Opis</Label>
                 <Input type="text" name="opis" id="opis" value={form.opis} onChange={handleChange} placeholder="Opis transakcije" />
               </div>
-              <div className="space-y-2">
+                            <div className="space-y-2">
                 <Label htmlFor="komentar">Komentar</Label>
                 <Input type="text" name="komentar" id="komentar" value={form.komentar} onChange={handleChange} placeholder="Dodatni komentar" />
               </div>
@@ -142,19 +145,28 @@ export const FinansijeForm: React.FC<FinansijeFormProps> = ({ onSave, initialDat
                   name="vozilo" 
                   id="vozilo" 
                   value={form.vozilo} 
-                  onChange={handleChange} 
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="">Izaberi vozilo</option>
-                  <option value="Svi">Svi</option>
-                  {vozila.map((vozilo) => (
-                    <option key={vozilo.$id} value={vozilo.naziv}>
-                      {vozilo.naziv}
+                  <option value="">Bez vozila</option>
+                  {vozila.map((v) => (
+                    <option key={v.$id} value={v.$id}>
+                      {v.naziv} - {v.registracija}
                     </option>
                   ))}
                 </select>
               </div>
             </div>
+          </div>
+
+          {/* Slika računa/dokumenta */}
+          <div className="space-y-4">
+            <ImageUpload
+              value={form.imageId}
+              onChange={(fileId) => setForm({ ...form, imageId: fileId || undefined })}
+              label="Slika računa/dokumenta"
+              maxSizeMB={5}
+            />
           </div>
 
           <div className="pt-2">

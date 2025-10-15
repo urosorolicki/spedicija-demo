@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { ImageUpload } from "@/components/ImageUpload";
 
 interface MaterijalFormProps {
   onSave: (data: MaterijalData) => void;
@@ -20,6 +21,7 @@ export interface MaterijalData {
   vozac: string;
   vozilo: string;
   smer: string;
+  imageId?: string;
 }
 
 const jedinice = ["kg", "t", "l", "m³"];
@@ -37,6 +39,7 @@ export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialDat
     vozac: initialData?.vozac || "",
     vozilo: initialData?.vozilo || "",
     smer: initialData?.smer || smerovi[0],
+    imageId: initialData?.imageId || undefined,
   });
   const [error, setError] = useState<string>("");
 
@@ -164,6 +167,16 @@ export const MaterijalForm: React.FC<MaterijalFormProps> = ({ onSave, initialDat
                 </select>
               </div>
             </div>
+          </div>
+
+          {/* Slika tereta */}
+          <div className="space-y-4">
+            <ImageUpload
+              value={form.imageId}
+              onChange={(fileId) => setForm({ ...form, imageId: fileId || undefined })}
+              label="Slika tereta/materijala"
+              maxSizeMB={5}
+            />
           </div>
 
           <div className="pt-2">

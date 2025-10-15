@@ -10,6 +10,7 @@ export interface Finansija extends Models.Document {
   opis?: string;
   komentar?: string;
   vozilo?: string;
+  imageId?: string; // Appwrite Storage file ID (račun, dokument)
 }
 
 /**

@@ -12,6 +12,7 @@ export interface Materijal extends Models.Document {
   lokacija?: string;
   vozac?: string;
   vozilo?: string;
+  imageId?: string; // Appwrite Storage file ID (slika tereta)
 }
 
 /**

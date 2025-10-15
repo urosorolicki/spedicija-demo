@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { ImageUpload } from "@/components/ImageUpload";
 
 interface VoziloFormProps {
   onSave: (data: VoziloData) => void;
@@ -21,6 +22,7 @@ export interface VoziloData {
   status: string;
   sledecaRegistracija: string;
   sledecaRevizijaGorivo: string;
+  imageId?: string;
 }
 
 const statusi = ["aktivan", "neaktivan", "servis"];
@@ -39,6 +41,7 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
       status: statusi[0],
       sledecaRegistracija: "",
       sledecaRevizijaGorivo: "",
+      imageId: undefined,
     }
   );
   const [error, setError] = useState<string>("");
@@ -166,6 +169,16 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
                 <Input type="date" name="sledecaRegistracija" id="sledecaRegistracija" value={form.sledecaRegistracija} onChange={handleChange} />
               </div>
             </div>
+          </div>
+
+          {/* Slika vozila */}
+          <div className="space-y-4">
+            <ImageUpload
+              value={form.imageId}
+              onChange={(fileId) => setForm({ ...form, imageId: fileId || undefined })}
+              label="Slika vozila"
+              maxSizeMB={5}
+            />
           </div>
 
           <div className="flex gap-3 pt-2">
