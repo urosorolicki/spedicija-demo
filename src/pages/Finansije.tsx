@@ -101,6 +101,7 @@ export default function Finansije() {
       opis: data.opis,
       komentar: data.komentar,
       vozilo: data.vozilo,
+      imageId: data.imageId,
     } as any);
     
     console.log('[handleSave] Result:', result);
@@ -127,6 +128,7 @@ export default function Finansije() {
       opis: data.opis,
       komentar: data.komentar,
       vozilo: data.vozilo,
+      imageId: data.imageId,
     } as any);
     
     if (result.success) {

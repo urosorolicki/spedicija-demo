@@ -100,6 +100,7 @@ export default function Materijal() {
       lokacija: data.lokacija,
       vozac: data.vozac,
       vozilo: data.vozilo,
+      imageId: data.imageId,
     } as any);
     
     if (result.success) {
@@ -125,6 +126,7 @@ export default function Materijal() {
       lokacija: data.lokacija,
       vozac: data.vozac,
       vozilo: data.vozilo,
+      imageId: data.imageId,
     } as any);
     
     if (result.success) {

@@ -92,6 +92,7 @@ export default function Vozila() {
       godiste: data.godiste,
       status: data.status,
       sledecaRegistracija: data.sledecaRegistracija,
+      imageId: data.imageId,
     } as any);
     
     if (result.success) {
@@ -117,6 +118,7 @@ export default function Vozila() {
       godiste: data.godiste,
       status: data.status,
       sledecaRegistracija: data.sledecaRegistracija,
+      imageId: data.imageId,
     } as any);
     
     if (result.success) {

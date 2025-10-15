@@ -14,6 +14,7 @@ interface ImageUploadProps {
 export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(value ? getImageUrl(value) : null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,6 +33,13 @@ export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }:
       return;
     }
 
+    // Create local preview immediately for instant feedback
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setLocalPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
     setIsUploading(true);
 
     try {
@@ -43,11 +51,13 @@ export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }:
       // Upload new image
       const uploaded = await uploadImage(file);
       setPreviewUrl(uploaded.url);
+      setLocalPreview(null); // Clear local preview after successful upload
       onChange(uploaded.id);
       toast.success('Slika uspešno uploadovana!');
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Greška pri upload-u slike');
+      setLocalPreview(null); // Clear local preview on error
     } finally {
       setIsUploading(false);
     }
@@ -59,6 +69,7 @@ export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }:
     try {
       await deleteImage(value);
       setPreviewUrl(null);
+      setLocalPreview(null);
       onChange(null);
       toast.success('Slika obrisana');
     } catch (error) {
@@ -67,24 +78,33 @@ export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }:
     }
   };
 
+  // Show local preview during upload, then Appwrite URL after
+  const displayImage = localPreview || previewUrl;
+
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">{label}</label>
       
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
-        {previewUrl ? (
+        {displayImage ? (
           <div className="relative">
             <img
-              src={previewUrl}
+              src={displayImage}
               alt="Preview"
               className="w-full h-48 object-cover rounded-md"
             />
+            {isUploading && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md">
+                <Loader2 className="h-8 w-8 text-white animate-spin" />
+              </div>
+            )}
             <Button
               type="button"
               variant="destructive"
               size="sm"
               className="absolute top-2 right-2"
               onClick={handleRemove}
+              disabled={isUploading}
             >
               <X className="h-4 w-4" />
             </Button>
