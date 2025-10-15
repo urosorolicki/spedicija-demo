@@ -27,29 +27,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Proveravamo da li je korisnik već ulogovan (iz localStorage)
-    const savedUser = localStorage.getItem('markovickop_user');
+    // Proveravamo da li je korisnik već ulogovan
+    // Koristimo SAMO sessionStorage - briše se automatski kad se zatvori browser
+    const savedUser = sessionStorage.getItem('markovickop_user');
+    const loginTimestamp = sessionStorage.getItem('markovickop_login_time');
+    
     if (savedUser) {
       try {
         const parsedUser = JSON.parse(savedUser);
         
+        // Check session expiration (1 hour of inactivity)
+        if (loginTimestamp) {
+          const loginTime = parseInt(loginTimestamp);
+          const now = Date.now();
+          const oneHourInMs = 60 * 60 * 1000; // 1 hour
+          
+          if (now - loginTime > oneHourInMs) {
+            console.warn('Session expired after 1 hour of inactivity');
+            sessionStorage.removeItem('markovickop_user');
+            sessionStorage.removeItem('markovickop_login_time');
+            setUser(null);
+            setIsLoading(false);
+            return;
+          }
+        }
+        
         // Proveri da li user objekat ima 'id' polje
         if (!parsedUser.id) {
-          // Stari format bez id polja - izloguj korisnika
-          console.warn('Old user format detected, clearing localStorage');
-          localStorage.removeItem('markovickop_user');
+          console.warn('Old user format detected, clearing session');
+          sessionStorage.removeItem('markovickop_user');
+          sessionStorage.removeItem('markovickop_login_time');
           setUser(null);
-          // Opcionalno: prikaži alert korisniku
-          if (typeof window !== 'undefined') {
-            setTimeout(() => {
-              alert('Molimo vas da se ponovo ulogujete zbog ažuriranja sistema.');
-            }, 100);
-          }
         } else {
           setUser(parsedUser);
         }
       } catch (error) {
-        localStorage.removeItem('markovickop_user');
+        sessionStorage.removeItem('markovickop_user');
+        sessionStorage.removeItem('markovickop_login_time');
       }
     }
     setIsLoading(false);
@@ -79,7 +93,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         role: result.user.role,
       };
       setUser(userData);
-      localStorage.setItem('markovickop_user', JSON.stringify(userData));
+      // Čuvamo SAMO u sessionStorage - automatski se briše kad se zatvori browser
+      sessionStorage.setItem('markovickop_user', JSON.stringify(userData));
+      sessionStorage.setItem('markovickop_login_time', Date.now().toString());
       loginRateLimiter.reset(cleanUsername);
       return { success: true };
     }
@@ -89,7 +105,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('markovickop_user');
+    sessionStorage.removeItem('markovickop_user');
+    sessionStorage.removeItem('markovickop_login_time');
   };
 
   const changePassword = async (oldPassword: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
