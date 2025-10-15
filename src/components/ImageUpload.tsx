@@ -75,7 +75,7 @@ export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }:
       setPreviewUrl(null);
       setLocalPreview(null);
       onChange(null);
-      toast.success('Slika obrisana');
+      toast.success('Slika obrisana - sačuvaj promene');
     } catch (error) {
       console.error('Delete error:', error);
       toast.error('Greška pri brisanju slike');

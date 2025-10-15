@@ -407,6 +407,10 @@ export default function Vozila() {
                       src={getImageUrl(vozilo.imageId)}
                       alt={vozilo.naziv}
                       className="w-full h-32 sm:h-40 object-cover rounded-md"
+                      onError={(e) => {
+                        // Hide image if it fails to load (file deleted from storage)
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
                   </div>
                 )}
