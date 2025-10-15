@@ -29,8 +29,22 @@ const tipovi = ["Kiper kamion", "Tegljač", "Mixer", "Specijalno vozilo"];
 
 export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCancel }) => {
   const [isOpen, setIsOpen] = useState(!!editData);
-  const [form, setForm] = useState<VoziloData>(
-    editData || {
+  const [form, setForm] = useState<VoziloData>(() => {
+    if (editData) {
+      // Map database fields to form fields
+      return {
+        naziv: (editData as any).naziv || "",
+        tip: (editData as any).tipVozila || editData.tip || tipovi[0],
+        nosivost: editData.nosivost || 0,
+        registracija: editData.registracija || "",
+        kilometraza: (editData as any).kilometraza || 0,
+        godiste: (editData as any).godiste || new Date().getFullYear(),
+        status: (editData as any).status || statusi[0],
+        sledecaRegistracija: (editData as any).sledecaRegistracija || "",
+        imageId: (editData as any).imageId,
+      };
+    }
+    return {
       naziv: "",
       tip: tipovi[0],
       nosivost: 0,
@@ -40,8 +54,8 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
       status: statusi[0],
       sledecaRegistracija: "",
       imageId: undefined,
-    }
-  );
+    };
+  });
   const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
