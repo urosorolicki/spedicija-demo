@@ -22,7 +22,7 @@ export async function getMaterijali(userId: string) {
     const response = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.MATERIJAL,
-      [Query.equal('userId', userId), Query.orderDesc('datum')]
+      [Query.orderDesc('datum')]
     );
     return { success: true, materijali: response.documents as unknown as Materijal[] };
   } catch (error: any) {

@@ -17,11 +17,13 @@ export interface Vozilo extends Models.Document {
  */
 export async function getVozila(userId: string) {
   try {
+    console.log('[getVozila] Fetching all vozila (shared database)');
     const response = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.VOZILA,
-      [Query.equal('userId', userId)]
+      [Query.orderDesc('$createdAt')]
     );
+    console.log('[getVozila] Found vozila:', response.documents.length, 'documents');
     return { success: true, vozila: response.documents as unknown as Vozilo[] };
   } catch (error: any) {
     console.error('Get vozila error:', error);

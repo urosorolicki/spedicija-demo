@@ -39,6 +39,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           console.warn('Old user format detected, clearing localStorage');
           localStorage.removeItem('markovickop_user');
           setUser(null);
+          // Opcionalno: prikaži alert korisniku
+          if (typeof window !== 'undefined') {
+            setTimeout(() => {
+              alert('Molimo vas da se ponovo ulogujete zbog ažuriranja sistema.');
+            }, 100);
+          }
         } else {
           setUser(parsedUser);
         }

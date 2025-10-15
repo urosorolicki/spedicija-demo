@@ -19,7 +19,7 @@ export async function getFinansije(userId: string) {
     const response = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FINANSIJE,
-      [Query.equal('userId', userId), Query.orderDesc('datum')]
+      [Query.orderDesc('datum')]
     );
     return { success: true, finansije: response.documents as unknown as Finansija[] };
   } catch (error: any) {

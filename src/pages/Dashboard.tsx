@@ -133,17 +133,17 @@ export default function Dashboard() {
   const materijalPoTipu = materijalData.reduce((acc, item) => {
     const existing = acc.find((x) => x.tip === item.materijal);
     if (existing) {
-      existing.dovoz += item.tip === "dovoz" ? item.tezina : 0;
-      existing.odvoz += item.tip === "odvoz" ? item.tezina : 0;
+      existing.ulaz += item.tip === "ulaz" ? item.tezina : 0;
+      existing.izlaz += item.tip === "izlaz" ? item.tezina : 0;
     } else {
       acc.push({
         tip: item.materijal,
-        dovoz: item.tip === "dovoz" ? item.tezina : 0,
-        odvoz: item.tip === "odvoz" ? item.tezina : 0,
+        ulaz: item.tip === "ulaz" ? item.tezina : 0,
+        izlaz: item.tip === "izlaz" ? item.tezina : 0,
       });
     }
     return acc;
-  }, [] as { tip: string; dovoz: number; odvoz: number }[]);
+  }, [] as { tip: string; ulaz: number; izlaz: number }[]);
 
   // Generate monthly data from finansije
   const mesecniData = finansijeData.reduce((acc, item) => {
@@ -269,7 +269,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <DollarSign className="h-5 w-5 text-accent" />
-              Materijal - Dovoz/Odvoz
+              Materijal - Ulaz/Izlaz
             </CardTitle>
           </CardHeader>
           <CardContent className="p-3 sm:p-4 md:p-6">
@@ -296,8 +296,8 @@ export default function Dashboard() {
                   }}
                 />
                 <Legend />
-                <Bar dataKey="dovoz" fill="hsl(var(--primary))" name="Dovoz (m³)" />
-                <Bar dataKey="odvoz" fill="hsl(var(--accent))" name="Odvoz (m³)" />
+                <Bar dataKey="ulaz" fill="hsl(var(--primary))" name="Ulaz (m³)" />
+                <Bar dataKey="izlaz" fill="hsl(var(--accent))" name="Izlaz (m³)" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

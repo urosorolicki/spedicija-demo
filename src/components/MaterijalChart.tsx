@@ -10,20 +10,20 @@ interface MaterijalChartProps {
 export function MaterijalChart({ data }: MaterijalChartProps) {
   // Group data by month
   const chartData = useMemo(() => {
-    const monthlyData: { [key: string]: { dovoz: number; odvoz: number } } = {};
+    const monthlyData: { [key: string]: { ulaz: number; izlaz: number } } = {};
 
     data.forEach((item) => {
       const date = new Date(item.datum);
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
       
       if (!monthlyData[monthKey]) {
-        monthlyData[monthKey] = { dovoz: 0, odvoz: 0 };
+        monthlyData[monthKey] = { ulaz: 0, izlaz: 0 };
       }
 
-      if (item.smer === "dovoz") {
-        monthlyData[monthKey].dovoz += item.kolicina;
+      if (item.smer === "ulaz") {
+        monthlyData[monthKey].ulaz += item.kolicina;
       } else {
-        monthlyData[monthKey].odvoz += item.kolicina;
+        monthlyData[monthKey].izlaz += item.kolicina;
       }
     });
 
@@ -36,15 +36,15 @@ export function MaterijalChart({ data }: MaterijalChartProps) {
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"];
         return {
           mesec: monthNames[parseInt(month) - 1],
-          dovoz: monthlyData[key].dovoz,
-          odvoz: monthlyData[key].odvoz,
-          razlika: monthlyData[key].dovoz - monthlyData[key].odvoz,
+          ulaz: monthlyData[key].ulaz,
+          izlaz: monthlyData[key].izlaz,
+          razlika: monthlyData[key].ulaz - monthlyData[key].izlaz,
         };
       });
   }, [data]);
 
-  const totalDovoz = chartData.reduce((sum, item) => sum + item.dovoz, 0);
-  const totalOdvoz = chartData.reduce((sum, item) => sum + item.odvoz, 0);
+  const totalUlaz = chartData.reduce((sum, item) => sum + item.ulaz, 0);
+  const totalIzlaz = chartData.reduce((sum, item) => sum + item.izlaz, 0);
 
   return (
     <Card className="shadow-card col-span-full">
@@ -56,13 +56,13 @@ export function MaterijalChart({ data }: MaterijalChartProps) {
               Analiza materijala
             </CardTitle>
             <CardDescription className="text-sm mt-1">
-              Dovoz i odvoz po mesecima (poslednih 6 meseci)
+              Ulaz i izlaz po mesecima (poslednih 6 meseci)
             </CardDescription>
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Ukupna razlika</p>
             <p className="text-lg font-bold text-accent">
-              {(totalDovoz - totalOdvoz).toFixed(1)} m³
+              {(totalUlaz - totalIzlaz).toFixed(1)} m³
             </p>
           </div>
         </div>
@@ -92,16 +92,16 @@ export function MaterijalChart({ data }: MaterijalChartProps) {
             />
             <Legend />
             <Bar
-              dataKey="dovoz"
+              dataKey="ulaz"
               fill="hsl(215 85% 55%)"
               radius={[4, 4, 0, 0]}
-              name="Dovoz"
+              name="Ulaz"
             />
             <Bar
-              dataKey="odvoz"
+              dataKey="izlaz"
               fill="hsl(25 95% 58%)"
               radius={[4, 4, 0, 0]}
-              name="Odvoz"
+              name="Izlaz"
             />
           </BarChart>
         </ResponsiveContainer>
