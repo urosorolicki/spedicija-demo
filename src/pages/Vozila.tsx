@@ -91,7 +91,6 @@ export default function Vozila() {
       kilometraza: data.kilometraza,
       godiste: data.godiste,
       status: data.status,
-      sledecaRevizijaGorivo: data.sledecaRevizijaGorivo,
       sledecaRegistracija: data.sledecaRegistracija,
     } as any);
     
@@ -117,7 +116,6 @@ export default function Vozila() {
       kilometraza: data.kilometraza,
       godiste: data.godiste,
       status: data.status,
-      sledecaRevizijaGorivo: data.sledecaRevizijaGorivo,
       sledecaRegistracija: data.sledecaRegistracija,
     } as any);
     
