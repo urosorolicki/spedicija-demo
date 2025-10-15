@@ -91,6 +91,8 @@ export default function Finansije() {
   const handleSave = async (data: FinansijeData) => {
     if (!user) return;
     
+    console.log('[handleSave] Saving finansija with data:', data);
+    
     const result = await createFinansija(user.id, {
       datum: data.datum,
       tip: data.tip as 'prihod' | 'rashod',
@@ -100,6 +102,8 @@ export default function Finansije() {
       komentar: data.komentar,
       vozilo: data.vozilo,
     } as any);
+    
+    console.log('[handleSave] Result:', result);
     
     if (result.success) {
       await loadFinansije();
@@ -420,6 +424,7 @@ export default function Finansije() {
                   <TableHead className="text-xs sm:text-sm">Tip</TableHead>
                   <TableHead className="hidden sm:table-cell text-xs sm:text-sm">Kategorija</TableHead>
                   <TableHead className="hidden md:table-cell text-xs sm:text-sm">Opis</TableHead>
+                  <TableHead className="hidden lg:table-cell text-xs sm:text-sm">Komentar</TableHead>
                   <TableHead className="hidden md:table-cell text-xs sm:text-sm">Vozilo</TableHead>
                   <TableHead className="text-right text-xs sm:text-sm">Iznos</TableHead>
                   <TableHead className="text-xs sm:text-sm w-[80px]"></TableHead>
@@ -441,6 +446,7 @@ export default function Finansije() {
                     </TableCell>
                     <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{transakcija.kategorija}</TableCell>
                     <TableCell className="hidden md:table-cell max-w-xs text-xs sm:text-sm">{transakcija.opis}</TableCell>
+                    <TableCell className="hidden lg:table-cell max-w-xs truncate text-xs sm:text-sm">{transakcija.komentar}</TableCell>
                     <TableCell className="hidden md:table-cell text-xs sm:text-sm">{transakcija.vozilo}</TableCell>
                     <TableCell
                       className={`text-right font-semibold text-xs sm:text-sm ${

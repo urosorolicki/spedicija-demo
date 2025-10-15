@@ -17,7 +17,7 @@ export interface FinansijeData {
   kategorija: string;
   iznos: number;
   opis: string;
-  komentar: string;
+  komentar?: string;
   vozilo: string;
 }
 
