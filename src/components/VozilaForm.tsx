@@ -165,10 +165,6 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
                 <Label htmlFor="sledecaRegistracija">Sledeća registracija</Label>
                 <Input type="date" name="sledecaRegistracija" id="sledecaRegistracija" value={form.sledecaRegistracija} onChange={handleChange} />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="sledecaRevizijaGorivo">Sledeća revizija goriva</Label>
-                <Input type="date" name="sledecaRevizijaGorivo" id="sledecaRevizijaGorivo" value={form.sledecaRevizijaGorivo} onChange={handleChange} />
-              </div>
             </div>
           </div>
 

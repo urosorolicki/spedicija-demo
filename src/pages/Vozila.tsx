@@ -428,12 +428,6 @@ export default function Vozila() {
                       {new Date(vozilo.sledecaRegistracija).toLocaleDateString("sr-RS")}
                     </span>
                   </p>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground">
-                    Revizija goriva:{" "}
-                    <span className="font-medium text-foreground">
-                      {new Date(vozilo.sledecaRevizijaGorivo).toLocaleDateString("sr-RS")}
-                    </span>
-                  </p>
                 </div>
               </CardContent>
             </Card>

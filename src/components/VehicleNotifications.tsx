@@ -144,9 +144,8 @@ export function VehicleNotifications({ vozila }: VehicleNotificationsProps) {
 
   const getNotificationText = (notif: VehicleNotification) => {
     const tipText = {
-      servis: "revizija goriva",
+      servis: "servis",
       registracija: "registracija",
-      revizijaGoriva: "revizija goriva",
       osiguranje: "osiguranje",
     }[notif.tip];
 
