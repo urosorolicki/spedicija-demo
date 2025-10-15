@@ -20,10 +20,10 @@ export function MaterijalChart({ data }: MaterijalChartProps) {
         monthlyData[monthKey] = { ulaz: 0, izlaz: 0 };
       }
 
-      if (item.smer === "ulaz") {
-        monthlyData[monthKey].ulaz += item.kolicina;
+      if (item.tip === "ulaz") {
+        monthlyData[monthKey].ulaz += item.tezina;
       } else {
-        monthlyData[monthKey].izlaz += item.kolicina;
+        monthlyData[monthKey].izlaz += item.tezina;
       }
     });
 

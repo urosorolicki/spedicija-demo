@@ -152,7 +152,7 @@ export default function Materijal() {
 
   // Get unique material types for filter
   const uniqueTipovi = useMemo(() => {
-    const tipovi = [...new Set(materijalData.map((m) => m.tip))];
+    const tipovi = [...new Set(materijalData.map((m) => m.materijal))];
     return tipovi.sort();
   }, [materijalData]);
 
@@ -163,21 +163,21 @@ export default function Materijal() {
     // Search filter
     if (searchQuery) {
       filtered = filtered.filter((m) =>
-        m.tip?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.materijal?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         m.lokacija?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         m.vozac?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         m.vozilo?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    // Smer filter
+    // Smer filter (tip u bazi = ulaz/izlaz)
     if (smerFilter !== "svi") {
-      filtered = filtered.filter((m) => m.smer === smerFilter);
+      filtered = filtered.filter((m) => m.tip === smerFilter);
     }
 
-    // Tip filter
+    // Tip filter (materijal u bazi = Pesak/Šljunak)
     if (tipFilter !== "svi") {
-      filtered = filtered.filter((m) => m.tip === tipFilter);
+      filtered = filtered.filter((m) => m.materijal === tipFilter);
     }
 
     // Sort
@@ -188,9 +188,9 @@ export default function Materijal() {
         case "datum-asc":
           return new Date(a.datum).getTime() - new Date(b.datum).getTime();
         case "kolicina-desc":
-          return b.kolicina - a.kolicina;
+          return b.tezina - a.tezina;
         case "kolicina-asc":
-          return a.kolicina - b.kolicina;
+          return a.tezina - b.tezina;
         default:
           return 0;
       }
@@ -201,12 +201,12 @@ export default function Materijal() {
 
   // Calculate totals from filtered data
   const ukupanUlaz = filteredData
-    .filter((m) => m.smer === "ulaz")
-    .reduce((sum, m) => sum + Number(m.kolicina), 0);
+    .filter((m) => m.tip === "ulaz")
+    .reduce((sum, m) => sum + Number(m.tezina), 0);
 
   const ukupanIzlaz = filteredData
-    .filter((m) => m.smer === "izlaz")
-    .reduce((sum, m) => sum + Number(m.kolicina), 0);
+    .filter((m) => m.tip === "izlaz")
+    .reduce((sum, m) => sum + Number(m.tezina), 0);
 
   const handleExport = (format: "json" | "csv" | "pdf") => {
     const timestamp = new Date().toISOString().split("T")[0];
@@ -420,8 +420,8 @@ export default function Materijal() {
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <Badge variant={unos.smer === "ulaz" ? "default" : "secondary"}>
-                    {unos.smer === "ulaz" ? (
+                  <Badge variant={unos.tip === "ulaz" ? "default" : "secondary"}>
+                    {unos.tip === "ulaz" ? (
                       <span className="flex items-center gap-1">
                         <ArrowDown className="h-3 w-3" /> Ulaz
                       </span>
@@ -432,7 +432,7 @@ export default function Materijal() {
                     )}
                   </Badge>
                   <span className="text-lg font-bold">
-                    {unos.kolicina} {unos.jedinica}
+                    {unos.tezina} {unos.jedinica}
                   </span>
                 </div>
 
@@ -475,13 +475,13 @@ export default function Materijal() {
                     <TableCell className="font-medium text-xs sm:text-sm">
                       {new Date(unos.datum).toLocaleDateString("sr-RS")}
                     </TableCell>
-                    <TableCell className="font-medium text-xs sm:text-sm">{unos.tip}</TableCell>
+                    <TableCell className="font-medium text-xs sm:text-sm">{unos.materijal}</TableCell>
                     <TableCell className="text-xs sm:text-sm">
-                      {unos.kolicina} {unos.jedinica}
+                      {unos.tezina} {unos.jedinica}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={unos.smer === "ulaz" ? "default" : "secondary"} className="text-xs">
-                        {unos.smer === "ulaz" ? (
+                      <Badge variant={unos.tip === "ulaz" ? "default" : "secondary"} className="text-xs">
+                        {unos.tip === "ulaz" ? (
                           <span className="flex items-center gap-1">
                             <ArrowDown className="h-3 w-3" /> Ulaz
                           </span>
