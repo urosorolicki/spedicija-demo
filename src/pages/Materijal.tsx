@@ -199,14 +199,29 @@ export default function Materijal() {
     return filtered;
   }, [materijalData, searchQuery, smerFilter, tipFilter, sortBy]);
 
-  // Calculate totals from filtered data (only m³)
-  const ukupanUlaz = filteredData
-    .filter((m) => m.tip === "ulaz" && m.jedinica === "m³")
-    .reduce((sum, m) => sum + Number(m.tezina), 0);
+  // Calculate totals from filtered data by unit
+  const ulazPoJedinici = filteredData
+    .filter((m) => m.tip === "ulaz")
+    .reduce((acc, m) => {
+      const jedinica = m.jedinica || "m³";
+      acc[jedinica] = (acc[jedinica] || 0) + Number(m.tezina);
+      return acc;
+    }, {} as Record<string, number>);
 
-  const ukupanIzlaz = filteredData
-    .filter((m) => m.tip === "izlaz" && m.jedinica === "m³")
-    .reduce((sum, m) => sum + Number(m.tezina), 0);
+  const izlazPoJedinici = filteredData
+    .filter((m) => m.tip === "izlaz")
+    .reduce((acc, m) => {
+      const jedinica = m.jedinica || "m³";
+      acc[jedinica] = (acc[jedinica] || 0) + Number(m.tezina);
+      return acc;
+    }, {} as Record<string, number>);
+
+  // Format totals for display
+  const formatTotals = (totals: Record<string, number>) => {
+    const entries = Object.entries(totals);
+    if (entries.length === 0) return "0";
+    return entries.map(([unit, value]) => `${value.toFixed(2)} ${unit}`).join(" | ");
+  };
 
   const handleExport = (format: "json" | "csv" | "pdf") => {
     const timestamp = new Date().toISOString().split("T")[0];
@@ -332,7 +347,7 @@ export default function Materijal() {
             <ArrowDown className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-lg sm:text-2xl font-bold text-primary">{ukupanUlaz} m³</div>
+            <div className="text-lg sm:text-2xl font-bold text-primary">{formatTotals(ulazPoJedinici)}</div>
           </CardContent>
         </Card>
         <Card className="shadow-card border-accent/20">
@@ -341,7 +356,7 @@ export default function Materijal() {
             <ArrowUp className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
           </CardHeader>
           <CardContent>
-            <div className="text-lg sm:text-2xl font-bold text-accent">{ukupanIzlaz} m³</div>
+            <div className="text-lg sm:text-2xl font-bold text-accent">{formatTotals(izlazPoJedinici)}</div>
           </CardContent>
         </Card>
         <Card className="shadow-card">
