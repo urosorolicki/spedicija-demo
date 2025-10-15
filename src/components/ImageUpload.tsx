@@ -43,9 +43,13 @@ export function ImageUpload({ value, onChange, label = "Slika", maxSizeMB = 5 }:
     setIsUploading(true);
 
     try {
-      // Delete old image if exists
+      // Delete old image if exists (will silently fail if file not found)
       if (value) {
-        await deleteImage(value);
+        try {
+          await deleteImage(value);
+        } catch (deleteError) {
+          console.warn('Could not delete old image, continuing with upload:', deleteError);
+        }
       }
 
       // Upload new image

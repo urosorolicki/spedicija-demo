@@ -12,13 +12,19 @@ export interface UploadedImage {
  */
 export const uploadImage = async (file: File): Promise<UploadedImage> => {
   try {
+    console.log('[uploadImage] Starting upload for file:', file.name, 'Size:', file.size);
+    
     const response = await storage.createFile(
       STORAGE_BUCKET_ID,
       ID.unique(),
       file
     );
 
+    console.log('[uploadImage] Upload successful, file ID:', response.$id);
+
     const url = storage.getFilePreview(STORAGE_BUCKET_ID, response.$id);
+    
+    console.log('[uploadImage] Preview URL:', url.toString());
 
     return {
       id: response.$id,
@@ -26,7 +32,7 @@ export const uploadImage = async (file: File): Promise<UploadedImage> => {
       name: file.name,
     };
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error('[uploadImage] Error uploading image:', error);
     throw new Error('Greška pri upload-u slike');
   }
 };
@@ -37,7 +43,12 @@ export const uploadImage = async (file: File): Promise<UploadedImage> => {
 export const deleteImage = async (fileId: string): Promise<void> => {
   try {
     await storage.deleteFile(STORAGE_BUCKET_ID, fileId);
-  } catch (error) {
+  } catch (error: any) {
+    // If file doesn't exist (404), silently ignore
+    if (error?.code === 404 || error?.type === 'storage_file_not_found') {
+      console.warn('File not found in storage, already deleted:', fileId);
+      return;
+    }
     console.error('Error deleting image:', error);
     throw new Error('Greška pri brisanju slike');
   }
