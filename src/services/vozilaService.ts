@@ -3,9 +3,12 @@ import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 
 export interface Vozilo extends Models.Document {
   userId: string;
+  naziv: string;
   registracija: string;
   tipVozila?: string;
   nosivost?: number;
+  kilometraza?: number;
+  godiste?: number;
   sledecaRevizijaGorivo?: string;
   sledecaRegistracija?: string;
   datumIstekaOsiguranja?: string;

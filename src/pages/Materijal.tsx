@@ -199,13 +199,13 @@ export default function Materijal() {
     return filtered;
   }, [materijalData, searchQuery, smerFilter, tipFilter, sortBy]);
 
-  // Calculate totals from filtered data
+  // Calculate totals from filtered data (only m³)
   const ukupanUlaz = filteredData
-    .filter((m) => m.tip === "ulaz")
+    .filter((m) => m.tip === "ulaz" && m.jedinica === "m³")
     .reduce((sum, m) => sum + Number(m.tezina), 0);
 
   const ukupanIzlaz = filteredData
-    .filter((m) => m.tip === "izlaz")
+    .filter((m) => m.tip === "izlaz" && m.jedinica === "m³")
     .reduce((sum, m) => sum + Number(m.tezina), 0);
 
   const handleExport = (format: "json" | "csv" | "pdf") => {

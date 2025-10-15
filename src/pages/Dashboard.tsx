@@ -130,20 +130,22 @@ export default function Dashboard() {
   const lastMonthSaldo = lastMonthPrihodi - lastMonthRashodi;
   const saldoTrend = calculateTrend(currentMonthSaldo, lastMonthSaldo);
 
-  const materijalPoTipu = materijalData.reduce((acc, item) => {
-    const existing = acc.find((x) => x.tip === item.materijal);
-    if (existing) {
-      existing.ulaz += item.tip === "ulaz" ? item.tezina : 0;
-      existing.izlaz += item.tip === "izlaz" ? item.tezina : 0;
-    } else {
-      acc.push({
-        tip: item.materijal,
-        ulaz: item.tip === "ulaz" ? item.tezina : 0,
-        izlaz: item.tip === "izlaz" ? item.tezina : 0,
-      });
-    }
-    return acc;
-  }, [] as { tip: string; ulaz: number; izlaz: number }[]);
+  const materijalPoTipu = materijalData
+    .filter((item) => item.jedinica === "m³") // Only count m³
+    .reduce((acc, item) => {
+      const existing = acc.find((x) => x.tip === item.materijal);
+      if (existing) {
+        existing.ulaz += item.tip === "ulaz" ? item.tezina : 0;
+        existing.izlaz += item.tip === "izlaz" ? item.tezina : 0;
+      } else {
+        acc.push({
+          tip: item.materijal,
+          ulaz: item.tip === "ulaz" ? item.tezina : 0,
+          izlaz: item.tip === "izlaz" ? item.tezina : 0,
+        });
+      }
+      return acc;
+    }, [] as { tip: string; ulaz: number; izlaz: number }[]);
 
   // Generate monthly data from finansije
   const mesecniData = finansijeData.reduce((acc, item) => {

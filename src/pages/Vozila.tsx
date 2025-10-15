@@ -402,7 +402,7 @@ export default function Vozila() {
                 <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
                   <Truck className="h-3 w-3 sm:h-4 sm:w-4 text-primary flex-shrink-0" />
                   <span className="text-muted-foreground">Tip:</span>
-                  <span className="font-medium truncate">{vozilo.tip}</span>
+                  <span className="font-medium truncate">{vozilo.tipVozila}</span>
                 </div>
                 <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
                   <Settings className="h-3 w-3 sm:h-4 sm:w-4 text-primary flex-shrink-0" />
