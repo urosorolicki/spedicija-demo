@@ -50,11 +50,23 @@ export const VozilaForm: React.FC<VoziloFormProps> = ({ onSave, editData, onCanc
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.naziv || !form.tip || !form.nosivost || !form.registracija || !form.kilometraza || !form.godiste || !form.status || !form.sledecaRegistracija) {
+    
+    console.log('[VozilaForm] Submitting with data:', form);
+    
+    if (!form.naziv || !form.tip || !form.registracija || !form.status || !form.sledecaRegistracija) {
+      console.log('[VozilaForm] Validation failed - missing required fields');
       setError("Sva polja su obavezna.");
       return;
     }
+    
+    if (!form.nosivost || !form.kilometraza || !form.godiste) {
+      console.log('[VozilaForm] Validation failed - missing numeric fields');
+      setError("Sva polja su obavezna.");
+      return;
+    }
+    
     setError("");
+    console.log('[VozilaForm] Validation passed, calling onSave');
     onSave({
       ...form,
       nosivost: Number(form.nosivost),
