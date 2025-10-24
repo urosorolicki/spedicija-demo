@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
     // Check localStorage first
-    const stored = localStorage.getItem("markovickop_theme");
+    const stored = localStorage.getItem("spedicija_demo_theme");
     if (stored === "light" || stored === "dark") {
       return stored;
     }
@@ -25,7 +25,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
-    localStorage.setItem("markovickop_theme", theme);
+    localStorage.setItem("spedicija_demo_theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {

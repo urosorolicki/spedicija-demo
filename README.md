@@ -1,6 +1,6 @@
-# Marković Kop - Dashboard Uputstvo
+# Spedicija Demo - Dashboard Uputstvo
 
-Ovaj dokument služi kao vodič za korišćenje aplikacije, unos podataka i upravljanje korisnicima.
+Ovaj dokument služi kao vodič za korišćenje demo verzije aplikacije za upravljanje spedicijom, unos podataka i upravljanje korisnicima.
 
 ---
 

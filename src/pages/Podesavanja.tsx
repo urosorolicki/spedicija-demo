@@ -40,7 +40,7 @@ export default function Podesavanja() {
 
     try {
       // Update user data in localStorage
-      const users = JSON.parse(localStorage.getItem("markovickop_users") || "[]");
+      const users = JSON.parse(localStorage.getItem("spedicija_demo_users") || "[]");
       const updatedUsers = users.map((u: any) => {
         if (u.username === user?.username) {
           return {
@@ -52,12 +52,12 @@ export default function Podesavanja() {
         return u;
       });
       
-      localStorage.setItem("markovickop_users", JSON.stringify(updatedUsers));
+      localStorage.setItem("spedicija_demo_users", JSON.stringify(updatedUsers));
       
       // Update current user in localStorage
       const currentUser = updatedUsers.find((u: any) => u.username === user?.username);
       if (currentUser) {
-        localStorage.setItem("markovickop_current_user", JSON.stringify(currentUser));
+        localStorage.setItem("spedicija_demo_current_user", JSON.stringify(currentUser));
       }
       
       setProfileSuccess("Profil je uspešno ažuriran!");

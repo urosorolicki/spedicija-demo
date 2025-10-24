@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Proveravamo da li je korisnik već ulogovan
     // Koristimo SAMO sessionStorage - briše se automatski kad se zatvori browser
-    const savedUser = sessionStorage.getItem('markovickop_user');
-    const loginTimestamp = sessionStorage.getItem('markovickop_login_time');
+    const savedUser = sessionStorage.getItem('spedicija_demo_user');
+    const loginTimestamp = sessionStorage.getItem('spedicija_demo_login_time');
     
     if (savedUser) {
       try {
@@ -44,8 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           
           if (now - loginTime > oneHourInMs) {
             console.warn('Session expired after 1 hour of inactivity');
-            sessionStorage.removeItem('markovickop_user');
-            sessionStorage.removeItem('markovickop_login_time');
+            sessionStorage.removeItem('spedicija_demo_user');
+            sessionStorage.removeItem('spedicija_demo_login_time');
             setUser(null);
             setIsLoading(false);
             return;
@@ -55,15 +55,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Proveri da li user objekat ima 'id' polje
         if (!parsedUser.id) {
           console.warn('Old user format detected, clearing session');
-          sessionStorage.removeItem('markovickop_user');
-          sessionStorage.removeItem('markovickop_login_time');
+          sessionStorage.removeItem('spedicija_demo_user');
+          sessionStorage.removeItem('spedicija_demo_login_time');
           setUser(null);
         } else {
           setUser(parsedUser);
         }
       } catch (error) {
-        sessionStorage.removeItem('markovickop_user');
-        sessionStorage.removeItem('markovickop_login_time');
+        sessionStorage.removeItem('spedicija_demo_user');
+        sessionStorage.removeItem('spedicija_demo_login_time');
       }
     }
     setIsLoading(false);
@@ -94,8 +94,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
       setUser(userData);
       // Čuvamo SAMO u sessionStorage - automatski se briše kad se zatvori browser
-      sessionStorage.setItem('markovickop_user', JSON.stringify(userData));
-      sessionStorage.setItem('markovickop_login_time', Date.now().toString());
+      sessionStorage.setItem('spedicija_demo_user', JSON.stringify(userData));
+      sessionStorage.setItem('spedicija_demo_login_time', Date.now().toString());
       loginRateLimiter.reset(cleanUsername);
       return { success: true };
     }
@@ -105,8 +105,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    sessionStorage.removeItem('markovickop_user');
-    sessionStorage.removeItem('markovickop_login_time');
+    sessionStorage.removeItem('spedicija_demo_user');
+    sessionStorage.removeItem('spedicija_demo_login_time');
   };
 
   const changePassword = async (oldPassword: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {

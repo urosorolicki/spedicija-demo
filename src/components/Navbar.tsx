@@ -33,7 +33,7 @@ export const Navbar = ({ onMenuClick }: NavbarProps) => {
               <Truck className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg md:text-xl font-bold text-foreground">Marković Kop</h1>
+              <h1 className="text-lg md:text-xl font-bold text-foreground">Spedicija Demo</h1>
               <p className="text-[10px] md:text-xs text-muted-foreground">Upravljački sistem</p>
             </div>
           </div>

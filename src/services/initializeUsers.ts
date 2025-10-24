@@ -6,11 +6,11 @@ import { registerUser } from './authService';
  */
 export async function initializeDefaultUsers() {
   const defaultUsers = [
-    { username: 'aca', password: 'aca123', email: 'aca@markovickop.rs', role: 'user' },
-    { username: 'dejan', password: 'dejan123', email: 'dejan@markovickop.rs', role: 'user' },
-    { username: 'laki', password: 'laki123', email: 'laki@markovickop.rs', role: 'user' },
-    { username: 'uros', password: 'uros123', email: 'uros@markovickop.rs', role: 'admin' },
-    { username: 'jovana', password: 'jovana123', email: 'jovana@markovickop.rs', role: 'user' },
+    { username: 'aca', password: 'aca123', email: 'aca@demo.rs', role: 'user' },
+    { username: 'dejan', password: 'dejan123', email: 'dejan@demo.rs', role: 'user' },
+    { username: 'laki', password: 'laki123', email: 'laki@demo.rs', role: 'user' },
+    { username: 'uros', password: 'uros123', email: 'uros@demo.rs', role: 'admin' },
+    { username: 'jovana', password: 'jovana123', email: 'jovana@demo.rs', role: 'user' },
   ];
 
   console.log('🚀 Inicijalizacija default korisnika...');
