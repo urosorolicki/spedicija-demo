@@ -49,7 +49,7 @@ export const Login = () => {
               </div>
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-white">Marković Kop</CardTitle>
+              <CardTitle className="text-2xl font-bold text-white">Spedicija Demo</CardTitle>
               <CardDescription className="text-slate-300">
                 Upravljački sistem - Prijavite se
               </CardDescription>

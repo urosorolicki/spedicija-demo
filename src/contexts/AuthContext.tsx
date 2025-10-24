@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { loginUser, changeUserPassword, registerUser, getAllUsers, deleteUser as deleteUserService } from '@/services/authService';
+// Koristi demo auth service umesto Appwrite za demo verziju
+import { loginUser, registerUser, changeUserPassword, deleteUser as deleteUserService, getAllUsers } from '@/services/authService.demo';
 import { validatePasswordStrength, loginRateLimiter } from '@/lib/security';
 
 interface User {
