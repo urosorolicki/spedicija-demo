@@ -99,7 +99,7 @@ export default function Vozila() {
   const handleUpdate = async (data: VoziloData) => {
     if (!editingVozilo) return;
     
-    const result = await updateVozilo(editingVozilo.$id, {
+    const result = await updateVozilo(editingVozilo.id, {
       naziv: data.naziv,
       registracija: data.registracija,
       tipVozila: data.tip,

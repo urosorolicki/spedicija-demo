@@ -117,7 +117,7 @@ export default function Materijal() {
   const handleUpdate = async (data: MaterijalData) => {
     if (!editingMaterijal) return;
     
-    const result = await updateMaterijal(editingMaterijal.$id, {
+    const result = await updateMaterijal(editingMaterijal.id, {
       datum: data.datum,
       tip: data.smer as 'ulaz' | 'izlaz',
       materijal: data.tip,
@@ -143,7 +143,7 @@ export default function Materijal() {
 
   const confirmDelete = async () => {
     if (deletingMaterijal) {
-      const result = await deleteMaterijal(deletingMaterijal.$id);
+      const result = await deleteMaterijal(deletingMaterijal.id);
       if (result.success) {
         await loadMaterijali();
       }

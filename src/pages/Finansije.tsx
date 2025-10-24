@@ -120,7 +120,7 @@ export default function Finansije() {
   const handleUpdate = async (data: FinansijeData) => {
     if (!editingFinansija) return;
     
-    const result = await updateFinansija(editingFinansija.$id, {
+    const result = await updateFinansija(editingFinansija.id, {
       datum: data.datum,
       tip: data.tip as 'prihod' | 'rashod',
       kategorija: data.kategorija,
@@ -145,7 +145,7 @@ export default function Finansije() {
 
   const confirmDelete = async () => {
     if (deletingFinansija) {
-      const result = await deleteFinansija(deletingFinansija.$id);
+      const result = await deleteFinansija(deletingFinansija.id);
       if (result.success) {
         await loadFinansije();
       }
