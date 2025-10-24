@@ -26,9 +26,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { getFinansije } from "@/services/finansijeService";
-import { getMaterijali } from "@/services/materijalService";
-import { getVozila } from "@/services/vozilaService";
+import { getFinansije, getMaterijali, getVozila } from "@/services/apiWrapper.localStorage";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -49,9 +47,9 @@ export default function Dashboard() {
     setIsLoading(true);
     
     const [vozilaResult, finansijeResult, materijalResult] = await Promise.all([
-      getVozila(user.id),
-      getFinansije(user.id),
-      getMaterijali(user.id),
+      getVozila(),
+      getFinansije(),
+      getMaterijali(),
     ]);
     
     if (vozilaResult.success && vozilaResult.vozila) {

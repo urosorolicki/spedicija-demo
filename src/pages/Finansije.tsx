@@ -41,8 +41,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { getFinansije, createFinansija, updateFinansija, deleteFinansija } from "@/services/finansijeService";
-import { getVozila } from "@/services/vozilaService";
+import { getFinansije, createFinansija, updateFinansija, deleteFinansija } from "@/services/apiWrapper.localStorage";
+import { getVozila } from "@/services/apiWrapper.localStorage";
 
 export default function Finansije() {
   const { user } = useAuth();

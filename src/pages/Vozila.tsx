@@ -34,8 +34,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { getVozila, createVozilo, updateVozilo, deleteVozilo } from "@/services/vozilaService";
-import { getFinansije } from "@/services/finansijeService";
+import { getVozila, createVozilo, updateVozilo, deleteVozilo } from "@/services/apiWrapper.localStorage";
+import { getFinansije } from "@/services/apiWrapper.localStorage";
 
 export default function Vozila() {
   const { user } = useAuth();
@@ -65,8 +65,8 @@ export default function Vozila() {
     
     setIsLoading(true);
     const [vozilaResult, finansijeResult] = await Promise.all([
-      getVozila(user.id),
-      getFinansije(user.id),
+      getVozila(),
+      getFinansije(),
     ]);
     
     if (vozilaResult.success && vozilaResult.vozila) {
@@ -83,17 +83,7 @@ export default function Vozila() {
   const handleSave = async (data: VoziloData) => {
     if (!user) return;
     
-    const result = await createVozilo(user.id, {
-      naziv: data.naziv,
-      registracija: data.registracija,
-      tipVozila: data.tip,
-      nosivost: data.nosivost,
-      kilometraza: data.kilometraza,
-      godiste: data.godiste,
-      status: data.status,
-      sledecaRegistracija: data.sledecaRegistracija,
-      imageId: data.imageId,
-    } as any);
+    const result = await createVozilo(user.id, data);
     
     if (result.success) {
       await loadVozila();
@@ -140,7 +130,7 @@ export default function Vozila() {
 
   const confirmDelete = async () => {
     if (deletingVozilo) {
-      const result = await deleteVozilo(deletingVozilo.$id);
+      const result = await deleteVozilo(deletingVozilo.id);
       if (result.success) {
         await loadVozila();
       }

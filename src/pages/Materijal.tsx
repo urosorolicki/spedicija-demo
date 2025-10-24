@@ -41,8 +41,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { getMaterijali, createMaterijal, updateMaterijal, deleteMaterijal } from "@/services/materijalService";
-import { getVozila } from "@/services/vozilaService";
+import { getMaterijali, createMaterijal, updateMaterijal, deleteMaterijal } from "@/services/apiWrapper.localStorage";
+import { getVozila } from "@/services/apiWrapper.localStorage";
 
 export default function Materijal() {
   const { user } = useAuth();
