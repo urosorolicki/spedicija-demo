@@ -26,7 +26,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { getFinansije, getMaterijali, getVozila } from "@/services/apiWrapper.localStorage";
+import { getFinansije, getMaterijali, getVozila } from "../services/apiWrapper.localStorage";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -52,16 +52,16 @@ export default function Dashboard() {
       getMaterijali(),
     ]);
     
-    if (vozilaResult.success && vozilaResult.vozila) {
-      setVozilaData(vozilaResult.vozila);
+    if (vozilaResult.success && vozilaResult.data) {
+      setVozilaData(vozilaResult.data);
     }
     
-    if (finansijeResult.success && finansijeResult.finansije) {
-      setFinansijeData(finansijeResult.finansije);
+    if (finansijeResult.success && finansijeResult.data) {
+      setFinansijeData(finansijeResult.data);
     }
     
-    if (materijalResult.success && materijalResult.materijali) {
-      setMaterijalData(materijalResult.materijali);
+    if (materijalResult.success && materijalResult.data) {
+      setMaterijalData(materijalResult.data);
     }
     
     setIsLoading(false);

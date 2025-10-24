@@ -2,17 +2,15 @@
 
 export interface DemoVozilo {
   id: string;
+  naziv: string;
   registracija: string;
-  marka: string;
-  model: string;
-  godinaProizvodnje: number;
-  tipGoriva: string;
+  tip: string;
+  nosivost: number;
+  godiste: number;
+  status: string;
   kilometraza: number;
-  status: 'aktivno' | 'neaktivno' | 'servis';
-  zadnjiServis?: string;
   sledecaRegistracija?: string;
-  nosivost?: number;
-  napomene?: string;
+  sledecaRevizijaGorivo?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -21,81 +19,71 @@ export interface DemoVozilo {
 const getDefaultVozila = (): DemoVozilo[] => [
   {
     id: '1',
+    naziv: 'Mercedes Sprinter',
     registracija: 'BG-123-AB',
-    marka: 'Mercedes',
-    model: 'Sprinter',
-    godinaProizvodnje: 2020,
-    tipGoriva: 'dizel',
-    kilometraza: 150000,
-    status: 'aktivno',
-    zadnjiServis: '2024-09-15',
-    sledecaRegistracija: '2025-03-15',
+    tip: 'Kombi',
     nosivost: 3500,
-    napomene: 'Redovno održavano vozilo',
+    godiste: 2020,
+    kilometraza: 150000,
+    status: 'aktivan',
+    sledecaRegistracija: '2025-03-15',
+    sledecaRevizijaGorivo: '2024-12-01',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: '2',
+    naziv: 'Volvo FH16',
     registracija: 'NS-456-CD',
-    marka: 'Volvo',
-    model: 'FH16',
-    godinaProizvodnje: 2019,
-    tipGoriva: 'dizel',
-    kilometraza: 280000,
-    status: 'aktivno',
-    zadnjiServis: '2024-08-22',
-    sledecaRegistracija: '2025-01-20',
+    tip: 'Kiper kamion',
     nosivost: 40000,
-    napomene: 'Kamion za dugotrajne rute',
+    godiste: 2019,
+    kilometraza: 280000,
+    status: 'aktivan',
+    sledecaRegistracija: '2025-01-20',
+    sledecaRevizijaGorivo: '2024-11-15',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: '3',
+    naziv: 'Iveco Daily',
     registracija: 'KG-789-EF',
-    marka: 'Iveco',
-    model: 'Daily',
-    godinaProizvodnje: 2021,
-    tipGoriva: 'dizel',
-    kilometraza: 95000,
-    status: 'servis',
-    zadnjiServis: '2024-10-10',
-    sledecaRegistracija: '2025-05-10',
+    tip: 'Kamion',
     nosivost: 7000,
-    napomene: 'U servisu zbog redovnog održavanja',
+    godiste: 2021,
+    kilometraza: 95000,
+    status: 'u servisu',
+    sledecaRegistracija: '2025-05-10',
+    sledecaRevizijaGorivo: '2024-10-20',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: '4',
+    naziv: 'MAN TGX',
     registracija: 'NI-321-GH',
-    marka: 'MAN',
-    model: 'TGX',
-    godinaProizvodnje: 2018,
-    tipGoriva: 'dizel',
-    kilometraza: 420000,
-    status: 'aktivno',
-    zadnjiServis: '2024-07-30',
-    sledecaRegistracija: '2024-12-15',
+    tip: 'Kiper kamion',
     nosivost: 44000,
-    napomene: 'Visoka kilometraza, potreban temeljniji pregled',
+    godiste: 2018,
+    kilometraza: 420000,
+    status: 'aktivan',
+    sledecaRegistracija: '2024-12-15',
+    sledecaRevizijaGorivo: '2024-09-30',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: '5',
+    naziv: 'Ford Transit',
     registracija: 'SU-654-IJ',
-    marka: 'Ford',
-    model: 'Transit',
-    godinaProizvodnje: 2022,
-    tipGoriva: 'dizel',
-    kilometraza: 45000,
-    status: 'aktivno',
-    zadnjiServis: '2024-09-05',
-    sledecaRegistracija: '2025-07-20',
+    tip: 'Kombi',
     nosivost: 2300,
-    napomene: 'Novo vozilo za gradske isporuke',
+    godiste: 2022,
+    kilometraza: 45000,
+    status: 'aktivan',
+    sledecaRegistracija: '2025-07-20',
+    sledecaRevizijaGorivo: '2025-01-10',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -270,8 +258,8 @@ export async function searchVozila(query: string) {
     
     const filteredVozila = vozila.filter(vozilo =>
       vozilo.registracija.toLowerCase().includes(lowerQuery) ||
-      vozilo.marka.toLowerCase().includes(lowerQuery) ||
-      vozilo.model.toLowerCase().includes(lowerQuery) ||
+      vozilo.naziv.toLowerCase().includes(lowerQuery) ||
+      vozilo.tip.toLowerCase().includes(lowerQuery) ||
       vozilo.status.toLowerCase().includes(lowerQuery)
     );
     

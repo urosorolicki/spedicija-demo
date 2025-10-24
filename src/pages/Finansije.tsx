@@ -41,8 +41,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { getFinansije, createFinansija, updateFinansija, deleteFinansija } from "@/services/apiWrapper.localStorage";
-import { getVozila } from "@/services/apiWrapper.localStorage";
+import { getFinansije, createFinansija, updateFinansija, deleteFinansija } from "../services/apiWrapper.localStorage";
+import { getVozila } from "../services/apiWrapper.localStorage";
 
 export default function Finansije() {
   const { user } = useAuth();
@@ -72,9 +72,9 @@ export default function Finansije() {
     if (!user) return;
     
     setIsLoading(true);
-    const result = await getFinansije(user.id);
-    if (result.success && result.finansije) {
-      setFinansijeData(result.finansije);
+    const result = await getFinansije();
+    if (result.success && result.data) {
+      setFinansijeData(result.data);
     }
     setIsLoading(false);
   };
@@ -82,9 +82,9 @@ export default function Finansije() {
   const loadVozila = async () => {
     if (!user) return;
     
-    const result = await getVozila(user.id);
-    if (result.success && result.vozila) {
-      setVozilaData(result.vozila);
+    const result = await getVozila();
+    if (result.success && result.data) {
+      setVozilaData(result.data);
     }
   };
 
@@ -93,7 +93,7 @@ export default function Finansije() {
     
     console.log('[handleSave] Saving finansija with data:', data);
     
-    const result = await createFinansija(user.id, {
+    const result = await createFinansija({
       datum: data.datum,
       tip: data.tip as 'prihod' | 'rashod',
       kategorija: data.kategorija,

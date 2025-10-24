@@ -34,8 +34,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { getVozila, createVozilo, updateVozilo, deleteVozilo } from "@/services/apiWrapper.localStorage";
-import { getFinansije } from "@/services/apiWrapper.localStorage";
+import { getVozila, createVozilo, updateVozilo, deleteVozilo } from "../services/apiWrapper.localStorage";
+import { getFinansije } from "../services/apiWrapper.localStorage";
 
 export default function Vozila() {
   const { user } = useAuth();
@@ -69,12 +69,12 @@ export default function Vozila() {
       getFinansije(),
     ]);
     
-    if (vozilaResult.success && vozilaResult.vozila) {
-      setVozilaData(vozilaResult.vozila);
+    if (vozilaResult.success && vozilaResult.data) {
+      setVozilaData(vozilaResult.data);
     }
     
-    if (finansijeResult.success && finansijeResult.finansije) {
-      setFinansijeData(finansijeResult.finansije);
+    if (finansijeResult.success && finansijeResult.data) {
+      setFinansijeData(finansijeResult.data);
     }
     
     setIsLoading(false);
@@ -83,7 +83,7 @@ export default function Vozila() {
   const handleSave = async (data: VoziloData) => {
     if (!user) return;
     
-    const result = await createVozilo(user.id, data);
+    const result = await createVozilo(data);
     
     if (result.success) {
       await loadVozila();

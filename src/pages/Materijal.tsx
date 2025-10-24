@@ -41,8 +41,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { getMaterijali, createMaterijal, updateMaterijal, deleteMaterijal } from "@/services/apiWrapper.localStorage";
-import { getVozila } from "@/services/apiWrapper.localStorage";
+import { getMaterijali, createMaterijal, updateMaterijal, deleteMaterijal } from "../services/apiWrapper.localStorage";
+import { getVozila } from "../services/apiWrapper.localStorage";
 
 export default function Materijal() {
   const { user } = useAuth();
@@ -72,9 +72,9 @@ export default function Materijal() {
     if (!user) return;
     
     setIsLoading(true);
-    const result = await getMaterijali(user.id);
-    if (result.success && result.materijali) {
-      setMaterijalData(result.materijali);
+    const result = await getMaterijali();
+    if (result.success && result.data) {
+      setMaterijalData(result.data);
     }
     setIsLoading(false);
   };
@@ -82,16 +82,16 @@ export default function Materijal() {
   const loadVozila = async () => {
     if (!user) return;
     
-    const result = await getVozila(user.id);
-    if (result.success && result.vozila) {
-      setVozilaData(result.vozila);
+    const result = await getVozila();
+    if (result.success && result.data) {
+      setVozilaData(result.data);
     }
   };
 
   const handleSave = async (data: MaterijalData) => {
     if (!user) return;
     
-    const result = await createMaterijal(user.id, {
+    const result = await createMaterijal({
       datum: data.datum,
       tip: data.smer as 'ulaz' | 'izlaz',
       materijal: data.tip,
