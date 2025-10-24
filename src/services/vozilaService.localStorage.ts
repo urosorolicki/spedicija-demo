@@ -119,6 +119,7 @@ export async function getAllVozila() {
     await new Promise(resolve => setTimeout(resolve, 300));
     
     const vozila = getVozila();
+    console.log('getAllVozila returning:', vozila);
     return { success: true, data: vozila };
   } catch (error: any) {
     console.error('Get vozila error:', error);

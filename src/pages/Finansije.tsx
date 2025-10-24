@@ -162,6 +162,8 @@ export default function Finansije() {
 
   // Filtered and sorted data
   const filteredData = useMemo(() => {
+    if (!finansijeData || finansijeData.length === 0) return [];
+    
     let filtered = [...finansijeData];
 
     // Search filter
@@ -187,13 +189,13 @@ export default function Finansije() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "datum-desc":
-          return new Date(b.datum).getTime() - new Date(a.datum).getTime();
+          return new Date(b.datum || 0).getTime() - new Date(a.datum || 0).getTime();
         case "datum-asc":
-          return new Date(a.datum).getTime() - new Date(b.datum).getTime();
+          return new Date(a.datum || 0).getTime() - new Date(b.datum || 0).getTime();
         case "iznos-desc":
-          return b.iznos - a.iznos;
+          return (b.iznos || 0) - (a.iznos || 0);
         case "iznos-asc":
-          return a.iznos - b.iznos;
+          return (a.iznos || 0) - (b.iznos || 0);
         default:
           return 0;
       }

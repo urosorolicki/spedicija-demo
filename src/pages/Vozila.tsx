@@ -147,6 +147,8 @@ export default function Vozila() {
 
   // Filtered and sorted data
   const filteredData = useMemo(() => {
+    if (!vozilaData || vozilaData.length === 0) return [];
+    
     let filtered = [...vozilaData];
 
     // Search filter
@@ -172,15 +174,15 @@ export default function Vozila() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "naziv":
-          return a.naziv.localeCompare(b.naziv);
+          return (a.naziv || '').localeCompare(b.naziv || '');
         case "kilometraza-desc":
-          return b.kilometraza - a.kilometraza;
+          return (b.kilometraza || 0) - (a.kilometraza || 0);
         case "kilometraza-asc":
-          return a.kilometraza - b.kilometraza;
+          return (a.kilometraza || 0) - (b.kilometraza || 0);
         case "godiste-desc":
-          return b.godiste - a.godiste;
+          return (b.godiste || 0) - (a.godiste || 0);
         case "godiste-asc":
-          return a.godiste - b.godiste;
+          return (a.godiste || 0) - (b.godiste || 0);
         default:
           return 0;
       }

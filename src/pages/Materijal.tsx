@@ -160,6 +160,8 @@ export default function Materijal() {
 
   // Filtered and sorted data
   const filteredData = useMemo(() => {
+    if (!materijalData || materijalData.length === 0) return [];
+    
     let filtered = [...materijalData];
 
     // Search filter
@@ -186,13 +188,13 @@ export default function Materijal() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "datum-desc":
-          return new Date(b.datum).getTime() - new Date(a.datum).getTime();
+          return new Date(b.datum || 0).getTime() - new Date(a.datum || 0).getTime();
         case "datum-asc":
-          return new Date(a.datum).getTime() - new Date(b.datum).getTime();
+          return new Date(a.datum || 0).getTime() - new Date(b.datum || 0).getTime();
         case "kolicina-desc":
-          return b.tezina - a.tezina;
+          return (b.tezina || 0) - (a.tezina || 0);
         case "kolicina-asc":
-          return a.tezina - b.tezina;
+          return (a.tezina || 0) - (b.tezina || 0);
         default:
           return 0;
       }
